@@ -247,9 +247,9 @@ void ImprimirArchivoTemporal(registro* array_registros, int numero_elementos, ch
 
      int i = 0;
      FILE *fptr;
-     fptr = fopen(strcat(nombre_archivo,"Temp"), "w");
+     fptr = fopen(strcat(nombre_archivo,"_temporal"), "w");
      if(fptr == NULL){
-        perror( strcat(nombre_archivo,"Temp") );
+        perror( strcat(nombre_archivo,"_temporal") );
         free(array_registros);
         exit(1);
      }
