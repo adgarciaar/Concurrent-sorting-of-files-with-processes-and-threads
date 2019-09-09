@@ -15,7 +15,6 @@ int main (int argc, char **argv) {
     char linea_aux[max_tamano_cadena];
 
     char delim[] = " ";
-    char delim1[] = "\n";
     int contador = 0;
     int numero_linea = 0;
     int i = 0;
@@ -27,13 +26,14 @@ int main (int argc, char **argv) {
     /*registro array_registros[numero_lineasArchivo];*/
     registro* array_registros = (registro*)malloc(numero_lineasArchivo*sizeof(registro));
 
-    if(argc!=2){
-        printf("Error con numero de argumentos\n");
+    if (array_registros == NULL) {
+        printf("Memory not allocated.\n");
         exit(1);
     }
 
-    if (array_registros == NULL) {
-        printf("Memory not allocated.\n");
+    if(argc!=2){
+        printf("Error con numero de argumentos\n");
+        free(array_registros);
         exit(1);
     }
 
@@ -50,7 +50,9 @@ int main (int argc, char **argv) {
       fclose(archivo);/* Close file */
 
     }else{
+       free(array_registros);
        perror ( argv[1] ); /* why didn't the file open? */
+       exit(1);
     }
 
 
@@ -117,6 +119,7 @@ int ContarLineasArchivo(char nombre_archivo[]){
     /* Check if file exists */
     if (fp == NULL){
         perror ( nombre_archivo ); /* why didn't the file open? */
+        exit(1);
     }
 
     /* Extract characters from file and store in character c */
@@ -246,7 +249,8 @@ void ImprimirArchivoTemporal(registro* array_registros, int numero_elementos, ch
      FILE *fptr;
      fptr = fopen(strcat(nombre_archivo,"Temp"), "w");
      if(fptr == NULL){
-        printf("Error!");
+        perror( strcat(nombre_archivo,"Temp") );
+        free(array_registros);
         exit(1);
      }
 
