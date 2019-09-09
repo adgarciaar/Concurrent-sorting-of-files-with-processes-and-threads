@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*#include <limits.h>*/
 #include "leerArchivo.h"
-/*#define maxNombreArchivo 100
-#define maxTamanoCadena 255
-#define maxNumeroRegistros 20000*/
 
 int ContarLineasArchivo(char filename[]);
-void OrdenarRegistro(registro record[], int numeroElementos);
-void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]);
+void OrdenarRegistro(registro* record, int numeroElementos);
+void ImprimirArchivoTemporal(registro* record, int numeroElementos, char filename[]);
 
 int main (int argc, char **argv) {
 
@@ -28,17 +24,16 @@ int main (int argc, char **argv) {
 
     int numeroLineasArchivo = ContarLineasArchivo(argv[1]);
 
-    /*typedef struct {
-      char cadena[255];
-      int tiempoEjecucion;
-      char fechaEjecucion[9];
-      char horaEjecucion[9];
-    } registro ;*/
-
-    registro record[numeroLineasArchivo];
+    /*registro record[numeroLineasArchivo];*/
+    registro* record = (registro*)malloc(numeroLineasArchivo*sizeof(registro));
 
     if(argc!=2){
         printf("Error con numero de argumentos\n");
+        exit(1);
+    }
+
+    if (record == NULL) {
+        printf("Memory not allocated.\n");
         exit(1);
     }
 
@@ -104,6 +99,8 @@ int main (int argc, char **argv) {
 
     ImprimirArchivoTemporal(record, numeroLineasArchivo, argv[1]);
 
+    free(record);
+
     return 0;
 
 }
@@ -134,7 +131,7 @@ int ContarLineasArchivo(char filename[]){
     return count;
 }
 
-void OrdenarRegistro(registro record[], int numeroElementos){
+void OrdenarRegistro(registro* record, int numeroElementos){
 
     int i = 0, j = 0;
     int resultadoComparacionStrings;
@@ -243,7 +240,7 @@ void OrdenarRegistro(registro record[], int numeroElementos){
 
 }
 
-void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]){
+void ImprimirArchivoTemporal(registro* record, int numeroElementos, char filename[]){
 
      int i = 0;
      FILE *fptr;

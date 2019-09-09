@@ -11,5 +11,5 @@ typedef struct {
 } registro ;
 
 int contarLineasArchivo(char filename[]);
-void ordenarRegistro(registro record[], int numeroElementos);
-void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]);
+void ordenarRegistro(registro* record, int numeroElementos);
+void ImprimirArchivoTemporal(registro* record, int numeroElementos, char filename[]);
