@@ -135,8 +135,8 @@ void OrdenarRegistro(registro record[], int numeroElementos){
 
     int i = 0, j = 0;
     int resultadoComparacionStrings;
-    char fecha_hora_1[tamanoFilaFechaHora+tamanoFilaFechaHora];
-    char fecha_hora_2[tamanoFilaFechaHora+tamanoFilaFechaHora];
+    char fecha_hora_1[tamanoFilaFechaHora+tamanoFilaFechaHora+1];
+    char fecha_hora_2[tamanoFilaFechaHora+tamanoFilaFechaHora+1];
     registro registroAuxiliar;
 
     /*for (i = 0; i < numeroElementos; i++){
@@ -146,9 +146,6 @@ void OrdenarRegistro(registro record[], int numeroElementos){
       printf("%s ",record[i].fechaEjecucion);
       printf("%s\n",record[i].horaEjecucion);
     }*/
-
-    strcpy(fecha_hora_1,"");
-    strcpy(fecha_hora_2,"");
 
     for (i = 0; i < numeroElementos; i++){
 
@@ -186,14 +183,45 @@ void OrdenarRegistro(registro record[], int numeroElementos){
 
             if(record[j].tiempoEjecucion == record[j+1].tiempoEjecucion){
                 /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
-                /*strcat(fecha_hora_1, record[j].fechaEjecucion);*/
-                /*strcat(fecha_hora_1, " ");*/
-                /*strcat(fecha_hora_1, record[j].horaEjecucion);*/
 
-                /*strcat(fecha_hora_2, record[j+1].fechaEjecucion);
+                strcpy(fecha_hora_1, record[j].fechaEjecucion);
+                strcat(fecha_hora_1, " ");
+                strcat(fecha_hora_1, record[j].horaEjecucion);
+                /*printf("%s\n",fecha_hora_1);*/
+
+                strcpy(fecha_hora_2, record[j+1].fechaEjecucion);
                 strcat(fecha_hora_2, " ");
-                strcat(fecha_hora_2, record[j+1].horaEjecucion);*/
+                strcat(fecha_hora_2, record[j+1].horaEjecucion);
 
+                resultadoComparacionStrings = strcmp(fecha_hora_1, fecha_hora_2);
+
+                if( resultadoComparacionStrings > 0 ){
+                  /*Si el elemento siguiente es mayor en fecha u hora*/
+
+                  /*Hay que intercabiar los elementos para que quede primero el menor*/
+
+                  /*Salvar los datos del que tiene menor tiempo de ejecución*/
+                  strcpy(registroAuxiliar.cadena, record[j+1].cadena);
+                  registroAuxiliar.tiempoEjecucion = record[j+1].tiempoEjecucion;
+                  strcpy(registroAuxiliar.fechaEjecucion, record[j+1].fechaEjecucion);
+                  strcpy(registroAuxiliar.horaEjecucion, record[j+1].horaEjecucion);
+
+                  /*Cambiar elemento con menor tiempo por el otro*/
+                  strcpy(record[j+1].cadena, record[j].cadena);
+                  record[j+1].tiempoEjecucion = record[j].tiempoEjecucion;
+                  strcpy(record[j+1].fechaEjecucion, record[j].fechaEjecucion);
+                  strcpy(record[j+1].horaEjecucion, record[j].horaEjecucion);
+
+                  /*Guardar los datos temporales para terminar intercambio*/
+                  strcpy(record[j].cadena, registroAuxiliar.cadena);
+                  record[j].tiempoEjecucion = registroAuxiliar.tiempoEjecucion;
+                  strcpy(record[j].fechaEjecucion, registroAuxiliar.fechaEjecucion);
+                  strcpy(record[j].horaEjecucion, registroAuxiliar.horaEjecucion);
+
+                /*}else{
+                    if( resultadoComparacionStrings < 0 ){
+                */
+                }
 
                 /*}*/
 
