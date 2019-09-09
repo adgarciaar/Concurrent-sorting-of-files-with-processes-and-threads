@@ -2,12 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+int contarLineasArchivo(char filename[100]);
+
 int main (int argc, char **argv) {
 
-    if(argc!=2){
-        printf("Error con numero de argumentos\n");
-        exit(1);
-    }
+    FILE * archivo;
+
+    char linea[255];
+    char lineaAux[255];
+
+    char delim[] = " ";
+    char delim1[] = "\n";
+    int contador = 0;
+    int numeroLinea = 0;
+    int i = 0;
+    char *item;
+    char *ptr;
+
+    int numeroLineasArchivo = contarLineasArchivo(argv[1]);
 
     typedef struct {
       char cadena[255];
@@ -16,20 +28,12 @@ int main (int argc, char **argv) {
       char horaEjecucion[9];
     } registro ;
 
-    registro record[20000];
+    registro record[numeroLineasArchivo];
 
-    FILE * archivo;
-    /*nombreArchivo = argv[1];*/
-
-    char linea[255];
-    char lineaAux[255];
-
-    char delim[] = " ";
-  	char delim1[] = "\n";
-  	int contador = 0;
-    int numeroLinea = 0;
-
-    char *item;
+    if(argc!=2){
+        printf("Error con numero de argumentos\n");
+        exit(1);
+    }
 
     archivo = fopen(argv[1],"r");
 
@@ -47,12 +51,12 @@ int main (int argc, char **argv) {
        perror ( argv[1] ); /* why didn't the file open? */
     }
 
-    int i = 0;
-    for (i = 0; i < 20000; i++){
+
+    for (i = 0; i < numeroLineasArchivo; i++){
 
         strcpy(lineaAux, record[i].cadena);
 
-        char *ptr;
+
         if( (ptr = strchr(lineaAux, '\n')) != NULL)
           *ptr = '\0';
 
@@ -82,7 +86,7 @@ int main (int argc, char **argv) {
     }
 
     i = 0;
-    for (i = 0; i < 20000; i++){
+    for (i = 0; i < numeroLineasArchivo; i++){
       printf("Contador:%d\n",i);
       printf("%s",record[i].cadena);
       printf("%d ",record[i].tiempoEjecucion);
@@ -92,4 +96,30 @@ int main (int argc, char **argv) {
 
     return 0;
 
+}
+
+int contarLineasArchivo(char filename[100]){
+    FILE *fp;
+    int count = 0;  /* Line counter (result) */
+    /*char filename[MAX_FILE_NAME];*/
+    char c;  /* To store a character read from file*/
+
+    /* Open the file */
+    fp = fopen(filename, "r");
+
+    /* Check if file exists */
+    if (fp == NULL){
+        perror ( filename ); /* why didn't the file open? */
+    }
+
+    /* Extract characters from file and store in character c */
+    for (c = getc(fp); c != EOF; c = getc(fp))
+        if (c == '\n') /* Increment count if this character is newline */
+            count = count + 1;
+
+    /* Close the file */
+    fclose(fp);
+    /*printf("The file %s has %d lines\n ", filename, count);*/
+
+    return count;
 }
