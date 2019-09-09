@@ -1,17 +1,23 @@
+#include "leerArchivo.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #define maximo_nombre_archivo 40
 #define maximo_numero_archivos 10
+
+void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso);
 
 int main (int argc, char **argv) {
 
     int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
     int i;
     int resultado_comparacion_strings;
-    bool flag = false;
+    bool bandera_orden_reverso = false;
     char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
     char archivo_output[maximo_nombre_archivo];
 
@@ -30,14 +36,14 @@ int main (int argc, char **argv) {
     }*/
     resultado_comparacion_strings = strcmp("-r", argv[1]);
     if( resultado_comparacion_strings == 0 ){
-        flag = true;
+        bandera_orden_reverso = true;
     }
-    if (flag == true && argc == 3){
+    if (bandera_orden_reverso == true && argc == 3){
         /*Si se ingresó flag -r pero sólo hay 3 argumentos significa que falta el archivo output*/
         printf("Error con numero de argumentos\n");
         exit(1);
     }
-    if (flag == false && argc == 13){
+    if (bandera_orden_reverso == false && argc == 13){
         /*Si no se ingresó flag -r y hay 13 argumentos significa que se introdujo un archivo de más*/
         printf("Error con numero de argumentos\n");
         exit(1);
@@ -59,5 +65,34 @@ int main (int argc, char **argv) {
 
     strcpy(archivo_output, argv[argc-1]);
     /*printf("%s\n", archivo_output);*/
+
+    RepartirArchivosProcesos(array_archivos_input, numero_archivos_input, bandera_orden_reverso);
+
+    return(0);
+}
+
+void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso){
+
+    int status, i,nprocesos=numero_archivos_input;
+    pid_t childpid;
+
+    ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);
+
+    for (i = 0; i < nprocesos; ++i) {
+            if ((childpid = fork()) < 0) {
+                perror("fork:");
+                exit(1);
+            }
+            /* Codigo que ejecutaran los hijos */
+            if (childpid == 0) {
+                printf("Hijo con pid %d", getpid());
+                /*printf(": %s\n", argv[i+1]);*/
+                exit(1);
+            }
+    }
+    /* El padre espera por los hijos */
+    for (i = 0; i < nprocesos; ++i)
+        wait(&status);
+    printf("El padre termina\n");
 
 }
