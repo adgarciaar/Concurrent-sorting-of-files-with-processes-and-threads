@@ -1,15 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+/*#include <limits.h>*/
+#include "leerArchivo.h"
+/*#define maxNombreArchivo 100
+#define maxTamanoCadena 255
+#define maxNumeroRegistros 20000*/
 
-int contarLineasArchivo(char filename[100]);
+int ContarLineasArchivo(char filename[maxNombreArchivo]);
+void OrdenarRegistro(registro record[], int numeroElementos);
 
 int main (int argc, char **argv) {
 
     FILE * archivo;
 
-    char linea[255];
-    char lineaAux[255];
+    char linea[maxTamanoCadena];
+    char lineaAux[maxTamanoCadena];
 
     char delim[] = " ";
     char delim1[] = "\n";
@@ -19,14 +25,14 @@ int main (int argc, char **argv) {
     char *item;
     char *ptr;
 
-    int numeroLineasArchivo = contarLineasArchivo(argv[1]);
+    int numeroLineasArchivo = ContarLineasArchivo(argv[1]);
 
-    typedef struct {
+    /*typedef struct {
       char cadena[255];
       int tiempoEjecucion;
       char fechaEjecucion[9];
       char horaEjecucion[9];
-    } registro ;
+    } registro ;*/
 
     registro record[numeroLineasArchivo];
 
@@ -55,7 +61,6 @@ int main (int argc, char **argv) {
     for (i = 0; i < numeroLineasArchivo; i++){
 
         strcpy(lineaAux, record[i].cadena);
-
 
         if( (ptr = strchr(lineaAux, '\n')) != NULL)
           *ptr = '\0';
@@ -86,19 +91,21 @@ int main (int argc, char **argv) {
     }
 
     i = 0;
-    for (i = 0; i < numeroLineasArchivo; i++){
-      printf("Contador:%d\n",i);
+    /*for (i = 0; i < numeroLineasArchivo; i++){
+      /*printf("Contador:%d\n",i);
       printf("%s",record[i].cadena);
       printf("%d ",record[i].tiempoEjecucion);
       printf("%s ",record[i].fechaEjecucion);
       printf("%s\n",record[i].horaEjecucion);
-    }
+    }*/
+
+    OrdenarRegistro(record, numeroLineasArchivo);
 
     return 0;
 
 }
 
-int contarLineasArchivo(char filename[100]){
+int ContarLineasArchivo(char filename[maxNombreArchivo]){
     FILE *fp;
     int count = 0;  /* Line counter (result) */
     /*char filename[MAX_FILE_NAME];*/
@@ -122,4 +129,17 @@ int contarLineasArchivo(char filename[100]){
     /*printf("The file %s has %d lines\n ", filename, count);*/
 
     return count;
+}
+
+void OrdenarRegistro(registro record[], int numeroElementos){
+
+    int i = 0;
+
+    for (i = 0; i < numeroElementos; i++){
+      printf("Contador:%d\n",i);
+      printf("%s",record[i].cadena);
+      printf("%d ",record[i].tiempoEjecucion);
+      printf("%s ",record[i].fechaEjecucion);
+      printf("%s\n",record[i].horaEjecucion);
+    }
 }
