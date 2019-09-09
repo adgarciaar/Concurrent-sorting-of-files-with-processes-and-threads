@@ -1,9 +1,9 @@
-proyecto1: csortp.o leerArchivo.o
-	gcc -lpthread -pthread -ansi -o proyecto1 csortp.o leerArchivo.o
-csortp.o: csortp.c leerArchivo.h
+csortp: csortp.o procesamientoArchivo.o
+	gcc -lpthread -pthread -ansi -o csortp csortp.o procesamientoArchivo.o
+csortp.o: csortp.c procesamientoArchivo.h
 	gcc -c csortp.c -lpthread -pthread
-leerArchivo.o: leerArchivo.c leerArchivo.h
-	gcc -c leerArchivo.c
+leerArchivo.o: procesamientoArchivo.c procesamientoArchivo.h
+	gcc -c procesamientoArchivo.c
 
 clean:
-	rm *.o proyecto1
+	rm *.o csortp
