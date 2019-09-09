@@ -7,8 +7,9 @@
 #define maxTamanoCadena 255
 #define maxNumeroRegistros 20000*/
 
-int ContarLineasArchivo(char filename[maxNombreArchivo]);
+int ContarLineasArchivo(char filename[]);
 void OrdenarRegistro(registro record[], int numeroElementos);
+void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]);
 
 int main (int argc, char **argv) {
 
@@ -90,22 +91,24 @@ int main (int argc, char **argv) {
 
     }
 
-    i = 0;
-    /*for (i = 0; i < numeroLineasArchivo; i++){
-      /*printf("Contador:%d\n",i);
+    OrdenarRegistro(record, numeroLineasArchivo);
+
+    /*i = 0;
+    for (i = 0; i < numeroLineasArchivo; i++){
+      printf("Contador:%d\n",i);
       printf("%s",record[i].cadena);
       printf("%d ",record[i].tiempoEjecucion);
       printf("%s ",record[i].fechaEjecucion);
       printf("%s\n",record[i].horaEjecucion);
     }*/
 
-    OrdenarRegistro(record, numeroLineasArchivo);
+    ImprimirArchivoTemporal(record, numeroLineasArchivo, argv[1]);
 
     return 0;
 
 }
 
-int ContarLineasArchivo(char filename[maxNombreArchivo]){
+int ContarLineasArchivo(char filename[]){
     FILE *fp;
     int count = 0;  /* Line counter (result) */
     /*char filename[MAX_FILE_NAME];*/
@@ -230,12 +233,30 @@ void OrdenarRegistro(registro record[], int numeroElementos){
       }
     }
 
-    for (i = 0; i < numeroElementos; i++){
+    /*for (i = 0; i < numeroElementos; i++){
       printf("Contador:%d\n",i);
       printf("%s",record[i].cadena);
       printf("%d ",record[i].tiempoEjecucion);
       printf("%s ",record[i].fechaEjecucion);
       printf("%s\n",record[i].horaEjecucion);
-    }
+    }*/
+
+}
+
+void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]){
+
+     int i = 0;
+     FILE *fptr;
+     fptr = fopen(strcat(filename,"Temp"), "w");
+     if(fptr == NULL){
+        printf("Error!");
+        exit(1);
+     }
+
+     for (i = 0; i < numeroElementos; i++){
+          fprintf(fptr,"%s", record[i].cadena);
+     }
+
+     fclose(fptr);
 
 }

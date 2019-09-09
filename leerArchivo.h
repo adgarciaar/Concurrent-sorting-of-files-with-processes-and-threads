@@ -10,5 +10,6 @@ typedef struct {
   char horaEjecucion[tamanoFilaFechaHora];
 } registro ;
 
-int contarLineasArchivo(char filename[maxNombreArchivo]);
+int contarLineasArchivo(char filename[]);
 void ordenarRegistro(registro record[], int numeroElementos);
+void ImprimirArchivoTemporal(registro record[], int numeroElementos, char filename[]);
