@@ -74,6 +74,7 @@ int main (int argc, char **argv) {
 
     int total_lineas = ContarTotalLineasTemporales( numero_archivos_input, array_archivos_input );
     array_temporales =  LeerArchivosTemporales( numero_archivos_input, array_archivos_input, total_lineas );
+    OrdenarRegistroPorMergeSort(array_temporales, total_lineas);
     ImprimirResultado( array_temporales, archivo_output, total_lineas );
 
     free(array_temporales);
