@@ -168,6 +168,10 @@ void merge(registro* array_registros, int l, int m, int r){
     int n1 = m - l + 1;
     int n2 =  r - m;
 
+    int resultado_comparacion_strings;
+    char fecha_hora_1[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
+    char fecha_hora_2[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
+
     /* create temp arrays */
     /*int L[n1], R[n2];*/
     registro* array_L = (registro*)malloc(n1*sizeof(registro));
@@ -211,13 +215,55 @@ void merge(registro* array_registros, int l, int m, int r){
         else
         {
 
-            strcpy(array_registros[k].cadena, array_R[j].cadena);
-            array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
-            strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
-            strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+            if (array_L[i].tiempo_ejecucion > array_R[j].tiempo_ejecucion){
 
-            /* arr[k] = R[j]; */
-            j++;
+                strcpy(array_registros[k].cadena, array_R[j].cadena);
+                array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
+                strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
+                strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+
+                /* arr[k] = R[j]; */
+                j++;
+                /*Hasta acá MergeSort con base en un sóla variable*/
+
+            }else{
+                /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
+
+                strcpy(fecha_hora_1, array_L[i].fecha_ejecucion);
+                strcat(fecha_hora_1, " ");
+                strcat(fecha_hora_1, array_L[i].hora_ejecucion);
+                /*printf("%s\n",fecha_hora_1);*/
+
+                strcpy(fecha_hora_2, array_R[j].fecha_ejecucion);
+                strcat(fecha_hora_2, " ");
+                strcat(fecha_hora_2, array_R[j].hora_ejecucion);
+
+                resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
+
+                if( resultado_comparacion_strings < 0 ){
+                  /*Si el elemento siguiente es mayor en fecha u hora*/
+
+                    strcpy(array_registros[k].cadena, array_L[i].cadena);
+                    array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
+                    strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
+                    strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
+
+                    /* arr[k] = L[i]; */
+                    i++;
+
+                }else{
+
+                    strcpy(array_registros[k].cadena, array_R[j].cadena);
+                    array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
+                    strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
+                    strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+
+                    /* arr[k] = R[j]; */
+                    j++;
+
+                }
+            }
+
         }
         k++;
     }
