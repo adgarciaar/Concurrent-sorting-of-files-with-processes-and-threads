@@ -13,7 +13,7 @@
 void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso);
 registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo], int total_lineas);
 int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]);
-void ImprimirResultado( registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas );
+void ImprimirResultado( registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso );
 
 int main (int argc, char **argv) {
 
@@ -75,7 +75,7 @@ int main (int argc, char **argv) {
     int total_lineas = ContarTotalLineasTemporales( numero_archivos_input, array_archivos_input );
     array_temporales =  LeerArchivosTemporales( numero_archivos_input, array_archivos_input, total_lineas );
     OrdenarRegistroPorMergeSort(array_temporales, total_lineas);
-    ImprimirResultado( array_temporales, archivo_output, total_lineas );
+    ImprimirResultado( array_temporales, archivo_output, total_lineas, bandera_orden_reverso );
 
     free(array_temporales);
     array_temporales = NULL;
@@ -175,8 +175,8 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     return array_temporales;
 }
 
-void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas) {
+void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso){
 
-    ImprimirArchivo(array_temporales, total_lineas, archivo_output, false, false);
+    ImprimirArchivo(array_temporales, total_lineas, archivo_output, bandera_orden_reverso, false);
 
 }
