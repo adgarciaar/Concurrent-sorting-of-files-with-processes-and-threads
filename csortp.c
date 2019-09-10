@@ -76,21 +76,32 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
 
-    for (i = 0; i < nprocesos; ++i) {
-            if ((childpid = fork()) < 0) {
-                perror("fork:");
-                exit(1);
-            }
-            /* Codigo que ejecutaran los hijos */
-            if (childpid == 0) {
-                printf("Hijo con pid %d\n", getpid());
-                ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);
-                exit(1);
-            }
+    if(nprocesos == 1){
+        ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);
+    }else{
+
+        for (i = 0; i < nprocesos; ++i) {
+                if ((childpid = fork()) < 0) {
+                    perror("fork:");
+                    exit(1);
+                }
+                /* Codigo que ejecutaran los hijos */
+                if (childpid == 0) {
+                    printf("Proceso hijo con pid %d\n", getpid());
+                    ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);
+                    printf("Termina proceso %d\n", getpid());
+                    exit(1);
+                }
+        }
+        /* El padre espera por los hijos */
+        for (i = 0; i < nprocesos; ++i){
+            wait(&status);
+        }
+        printf("El padre termina\n");
     }
-    /* El padre espera por los hijos */
-    for (i = 0; i < nprocesos; ++i)
-        wait(&status);
-    printf("El padre termina\n");
 
 }
+
+/*registro LeerArchivosTemporales(){
+
+}*/
