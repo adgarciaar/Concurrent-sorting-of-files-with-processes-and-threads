@@ -13,4 +13,4 @@ typedef struct {
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo);
 int ContarLineasArchivo(char nombre_archivo[]);
 void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos);
-void ImprimirArchivoTemporal(registro* array_registros, int numero_elementos, char nombre_archivo[], bool bandera_orden_reverso);
+void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool bandera_orden_reverso, bool temporal);

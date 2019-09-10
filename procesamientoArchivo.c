@@ -218,15 +218,19 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos){
 
 }
 
-void ImprimirArchivoTemporal(registro* array_registros, int numero_elementos, char nombre_archivo[], bool bandera_orden_reverso){
+void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool bandera_orden_reverso, bool temporal){
 
      int i = 0;
      FILE *fptr;
 
-     fptr = fopen(strcat(nombre_archivo,"_temporal"), "w");
+     if (temporal == true){
+          strcat(nombre_archivo,"_temporal");
+     }
+
+     fptr = fopen(nombre_archivo, "w");
 
      if(fptr == NULL){
-        perror( strcat(nombre_archivo,"_temporal") );
+        perror( nombre_archivo );
         free(array_registros);
         exit(1);
      }
