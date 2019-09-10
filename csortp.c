@@ -76,8 +76,6 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
 
-    ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);
-
     for (i = 0; i < nprocesos; ++i) {
             if ((childpid = fork()) < 0) {
                 perror("fork:");
@@ -85,8 +83,8 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
             }
             /* Codigo que ejecutaran los hijos */
             if (childpid == 0) {
-                printf("Hijo con pid %d", getpid());
-                /*printf(": %s\n", argv[i+1]);*/
+                printf("Hijo con pid %d\n", getpid());
+                ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);
                 exit(1);
             }
     }
