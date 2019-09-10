@@ -75,9 +75,19 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
 
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
+    int numero_lineas_archivo;
+    registro* array_registros = NULL;
 
     if(nprocesos == 1){
-        ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);
+        /*ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);*/
+
+        numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[0] );
+        array_registros = LeerArchivo( array_archivos_input[0], numero_lineas_archivo);
+        OrdenarRegistro(array_registros, numero_lineas_archivo);
+        ImprimirArchivoTemporal(array_registros, numero_lineas_archivo, array_archivos_input[0], bandera_orden_reverso);
+        free(array_registros);
+        array_registros = NULL;
+
     }else{
 
         for (i = 0; i < nprocesos; ++i) {
@@ -88,7 +98,15 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                 /* Codigo que ejecutaran los hijos */
                 if (childpid == 0) {
                     printf("Proceso hijo con pid %d\n", getpid());
-                    ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);
+
+                    numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
+                    array_registros = LeerArchivo( array_archivos_input[i], numero_lineas_archivo);
+                    OrdenarRegistro(array_registros, numero_lineas_archivo);
+                    ImprimirArchivoTemporal(array_registros, numero_lineas_archivo, array_archivos_input[i], bandera_orden_reverso);
+                    free(array_registros);
+                    array_registros = NULL;
+
+                    /*ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);*/
                     printf("Termina proceso %d\n", getpid());
                     exit(1);
                 }
@@ -97,11 +115,25 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
         for (i = 0; i < nprocesos; ++i){
             wait(&status);
         }
+
         printf("El padre termina\n");
     }
 
 }
 
-/*registro LeerArchivosTemporales(){
+registro LeerArchivosTemporales(int numero_archivos_input, char archivo_output[]){
+    /*Revisar el # de líneas de cada archivo*/
 
-}*/
+    /*Hallar el total de líneas de todo*/
+
+    /*registro* array_registros_temporales = (registro*)malloc(total_lineas*sizeof(registro));*/
+
+    /*Abrir cada archivo e ir llenando el array*/
+
+    /*int i = 0;
+    for (i = 0; i < numero_archivos_input; ++i) {
+
+    }*/
+
+
+}

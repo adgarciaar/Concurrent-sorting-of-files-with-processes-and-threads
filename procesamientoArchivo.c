@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-void ProcesarArchivo(char nombre_archivo[], bool bandera_orden_reverso) {
+registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
     FILE * archivo;
 
@@ -18,21 +18,14 @@ void ProcesarArchivo(char nombre_archivo[], bool bandera_orden_reverso) {
     char *item;
     char *ptr;
 
-    int numero_lineasArchivo = ContarLineasArchivo( nombre_archivo );
+    /*int numero_lineas_archivo = ContarLineasArchivo( nombre_archivo ); */
 
-    /*registro array_registros[numero_lineasArchivo];*/
-    registro* array_registros = (registro*)malloc(numero_lineasArchivo*sizeof(registro));
+    registro* array_registros = (registro*)malloc(numero_lineas_archivo*sizeof(registro));
 
     if (array_registros == NULL) {
         printf("Memory not allocated.\n");
         exit(1);
     }
-
-    /*if(argc!=2){
-        printf("Error con numero de argumentos\n");
-        free(array_registros);
-        exit(1);
-    }*/
 
     archivo = fopen( nombre_archivo ,"r");
 
@@ -53,7 +46,7 @@ void ProcesarArchivo(char nombre_archivo[], bool bandera_orden_reverso) {
     }
 
 
-    for (i = 0; i < numero_lineasArchivo; i++){
+    for (i = 0; i < numero_lineas_archivo; i++){
 
         strcpy(linea_aux, array_registros[i].cadena);
 
@@ -85,22 +78,7 @@ void ProcesarArchivo(char nombre_archivo[], bool bandera_orden_reverso) {
 
     }
 
-    OrdenarRegistro(array_registros, numero_lineasArchivo);
-
-    /*i = 0;
-    for (i = 0; i < numero_lineasArchivo; i++){
-      printf("Contador:%d\n",i);
-      printf("%s",array_registros[i].cadena);
-      printf("%d ",array_registros[i].tiempo_ejecucion);
-      printf("%s ",array_registros[i].fecha_ejecucion);
-      printf("%s\n",array_registros[i].hora_ejecucion);
-    }*/
-
-    ImprimirArchivoTemporal(array_registros, numero_lineasArchivo, nombre_archivo, bandera_orden_reverso);
-
-    free(array_registros);
-
-    /*return 0;*/
+    return array_registros;
 
 }
 
