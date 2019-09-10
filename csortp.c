@@ -96,7 +96,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
         numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[0] );
         array_registros = LeerArchivo( array_archivos_input[0], numero_lineas_archivo);
         OrdenarRegistroPorBurbuja(array_registros, numero_lineas_archivo);
-        ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[0], bandera_orden_reverso, true);
+        ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[0], false, true);
         free(array_registros);
         array_registros = NULL;
 
@@ -114,7 +114,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                     numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
                     array_registros = LeerArchivo( array_archivos_input[i], numero_lineas_archivo);
                     OrdenarRegistroPorBurbuja(array_registros, numero_lineas_archivo);
-                    ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[i], bandera_orden_reverso, true);
+                    ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[i], false, true);
                     free(array_registros);
                     array_registros = NULL;
 
