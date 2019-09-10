@@ -109,7 +109,7 @@ int ContarLineasArchivo(char nombre_archivo[]){
     return count;
 }
 
-void OrdenarRegistro(registro* array_registros, int numero_elementos){
+void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos){
 
     int i = 0, j = 0;
     int resultado_comparacion_strings;
@@ -222,7 +222,9 @@ void ImprimirArchivoTemporal(registro* array_registros, int numero_elementos, ch
 
      int i = 0;
      FILE *fptr;
+
      fptr = fopen(strcat(nombre_archivo,"_temporal"), "w");
+
      if(fptr == NULL){
         perror( strcat(nombre_archivo,"_temporal") );
         free(array_registros);
