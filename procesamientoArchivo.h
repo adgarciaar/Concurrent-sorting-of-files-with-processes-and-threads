@@ -1,7 +1,7 @@
 #include <stdbool.h>
 
 #define max_tamano_cadena 255
-#define tamano_fila_fecha_hora 9
+#define tamano_fila_fecha_hora 200
 
 typedef struct {
   char cadena[max_tamano_cadena];
