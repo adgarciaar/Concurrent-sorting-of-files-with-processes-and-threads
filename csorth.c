@@ -10,9 +10,6 @@
 
 #include <limits.h>
 
-#define maximo_nombre_archivo 50
-#define maximo_numero_archivos 10
-
 void *ProcesarArchivo(void *thread_id);
 void RepartirArchivosHilos(int numero_archivos_input);
 registro* UnirRegistros(int numero_archivos_input);
@@ -115,8 +112,8 @@ void *ProcesarArchivo(void *thread_id){
     OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id]);
 
     /*QUITAR ESTO AHORITA*/
-    /*ImprimirArchivo(array_temporales[ tarea_id ], numero_lineas_archivo, array_archivos_input[ tarea_id ], false, true);*/
-    ImprimirArchivo(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], array_archivos_input[ tarea_id ], false, true);
+
+    /*ImprimirArchivo(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], array_archivos_input[ tarea_id ], false, true);*/
 
     printf("Termina hilo %d\n", tarea_id+1);
 
@@ -135,6 +132,9 @@ void RepartirArchivosHilos(int numero_archivos_input){
 
     for(i=0; i<numero_archivos_input; i++){
         lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
+        if (lineas_por_archivo[i] == 0){
+            exit(1);
+        }
         array_temporales[ i ] = LeerArchivo( array_archivos_input[ i ], lineas_por_archivo[i] );
     }
 

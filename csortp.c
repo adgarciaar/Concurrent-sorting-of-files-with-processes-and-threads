@@ -7,13 +7,11 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define maximo_nombre_archivo 50
-#define maximo_numero_archivos 10
-
 void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso);
 registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo], int total_lineas);
 int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]);
 void ImprimirResultado( registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso );
+void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]);
 
 int main (int argc, char **argv) {
 
@@ -74,6 +72,7 @@ int main (int argc, char **argv) {
 
     int total_lineas = ContarTotalLineasTemporales( numero_archivos_input, array_archivos_input );
     array_temporales =  LeerArchivosTemporales( numero_archivos_input, array_archivos_input, total_lineas );
+    BorrarTemporales( numero_archivos_input, array_archivos_input );
     OrdenarRegistroPorMergeSort(array_temporales, total_lineas);
     ImprimirResultado( array_temporales, archivo_output, total_lineas, bandera_orden_reverso );
 
@@ -87,16 +86,26 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
 
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
-    int numero_lineas_archivo;
+    /*int numero_lineas_archivo;*/
     registro* array_registros = NULL;
+    int lineas_por_archivo[maximo_numero_archivos];
+
+    for(i=0; i<numero_archivos_input; i++){
+        lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
+        if (lineas_por_archivo[i] == 0){
+            exit(1);
+        }
+    }
 
     if(nprocesos == 1){
-        /*ProcesarArchivo(array_archivos_input[0], bandera_orden_reverso);*/
 
-        numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[0] );
-        array_registros = LeerArchivo( array_archivos_input[0], numero_lineas_archivo);
-        OrdenarRegistroPorBurbuja(array_registros, numero_lineas_archivo);
-        ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[0], false, true);
+        /*numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[0] );
+        if (numero_lineas_archivo==0){
+            exit(1);
+        }*/
+        array_registros = LeerArchivo( array_archivos_input[0], lineas_por_archivo[0]);
+        OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[0]);
+        ImprimirArchivo(array_registros, lineas_por_archivo[0], array_archivos_input[0], false, true);
         free(array_registros);
         array_registros = NULL;
 
@@ -111,10 +120,14 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                 if (childpid == 0) {
                     printf("Inicia proceso hijo con pid %d\n", getpid());
 
-                    numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
-                    array_registros = LeerArchivo( array_archivos_input[i], numero_lineas_archivo);
-                    OrdenarRegistroPorBurbuja(array_registros, numero_lineas_archivo);
-                    ImprimirArchivo(array_registros, numero_lineas_archivo, array_archivos_input[i], false, true);
+                    /*numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
+                    if (numero_lineas_archivo==0){
+                        /*printf("Problema leyendo archivo %s. Finaliza el proceso.\n", array_archivos_input[i]);
+                        exit(1);
+                    }*/
+                    array_registros = LeerArchivo( array_archivos_input[i], lineas_por_archivo[i]);
+                    OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[i]);
+                    ImprimirArchivo(array_registros, lineas_por_archivo[i], array_archivos_input[i], false, true);
                     free(array_registros);
                     array_registros = NULL;
 
@@ -138,9 +151,17 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
     int total_lineas = 0;
     int numero_lineas_archivo;
     int i;
+    char archivo_nombre[maximo_nombre_archivo];
 
     for (i = 0; i < numero_archivos_input; i++) {
-        numero_lineas_archivo = ContarLineasArchivo( strcat(array_archivos_input[i],"_temporal") );
+        strcpy(archivo_nombre, array_archivos_input[i]);
+        strcat(archivo_nombre,"_temporal");
+        /*printf("EN contar lineas: %s\n", archivo_nombre);*/
+        numero_lineas_archivo = ContarLineasArchivo( archivo_nombre );
+        if(numero_lineas_archivo==0){
+            BorrarTemporales(numero_archivos_input, array_archivos_input);
+            exit(1);
+        }
         total_lineas = total_lineas + numero_lineas_archivo;
     }
     /*printf("Total lineas: %d\n", total_lineas);*/
@@ -153,23 +174,33 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     int numero_lineas_archivo;
     registro* array_registros = NULL;
     registro* array_temporales = (registro*)malloc(total_lineas*sizeof(registro));
+    char archivo_nombre[maximo_nombre_archivo];
+
     if (array_temporales == NULL) {
         printf("Memory not allocated.\n");
         exit(1);
     }
 
     for (i = 0; i < numero_archivos_input; i++) {
-        numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
-        array_registros = LeerArchivo( array_archivos_input[i], numero_lineas_archivo);
+        strcpy(archivo_nombre, array_archivos_input[i]);
+        strcat(archivo_nombre,"_temporal");
+        /*printf("EN leer temporales: %s\n", archivo_nombre);*/
+        numero_lineas_archivo = ContarLineasArchivo( archivo_nombre );
+
+        if(numero_lineas_archivo == 0){
+            /*printf("%s\n", "Problema leyendo archivos temporales.");*/
+            BorrarTemporales(numero_archivos_input, array_archivos_input);
+            exit(1);
+        }
+
+        array_registros = LeerArchivo( archivo_nombre, numero_lineas_archivo);
 
         for (j = 0; j < numero_lineas_archivo; j++){
-
             strcpy(array_temporales[k].cadena, array_registros[j].cadena);
             array_temporales[k].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
             strcpy(array_temporales[k].fecha_ejecucion, array_registros[j].fecha_ejecucion);
             strcpy(array_temporales[k].hora_ejecucion, array_registros[j].hora_ejecucion);
             k = k + 1;
-
         }
         free(array_registros);
         array_registros = NULL;
@@ -177,6 +208,22 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     }
 
     return array_temporales;
+}
+
+void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]){
+    int status;
+    int i;
+    char archivo_nombre[maximo_nombre_archivo];
+
+    for (i=0; i<numero_archivos_input; i++){
+        strcpy(archivo_nombre, array_archivos_input[i]);
+        strcat(archivo_nombre,"_temporal");
+        status = remove( archivo_nombre );
+        if( status != 0 ){
+            perror( archivo_nombre );
+        }
+    }
+
 }
 
 void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso){

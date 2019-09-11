@@ -49,7 +49,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     for (i = 0; i < numero_lineas_archivo; i++){
 
         strcpy(linea_aux, array_registros[i].cadena);
-        
+
         if( (ptr = strchr(linea_aux, '\n')) != NULL)
           *ptr = '\0';
 
@@ -94,7 +94,8 @@ int ContarLineasArchivo(char nombre_archivo[]){
     /* Check if file exists */
     if (fp == NULL){
         perror ( nombre_archivo ); /* why didn't the file open? */
-        exit(1);
+        /*exit(1);*/
+        return 0;
     }
 
     /* Extract characters from file and store in character c */
@@ -398,14 +399,17 @@ void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombr
      int i = 0;
      FILE *fptr;
 
+     char archivo_nombre[maximo_nombre_archivo];
+     strcpy(archivo_nombre, nombre_archivo);
+
      if (temporal == true){
-          strcat(nombre_archivo,"_temporal");
+          strcat(archivo_nombre,"_temporal");
      }
 
-     fptr = fopen(nombre_archivo, "w");
+     fptr = fopen(archivo_nombre, "w");
 
      if(fptr == NULL){
-        perror( nombre_archivo );
+        perror( archivo_nombre );
         free(array_registros);
         exit(1);
      }

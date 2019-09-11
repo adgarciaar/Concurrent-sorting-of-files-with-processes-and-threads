@@ -3,6 +3,9 @@
 #define max_tamano_cadena 255
 #define tamano_fila_fecha_hora 9
 
+#define maximo_nombre_archivo 200
+#define maximo_numero_archivos 10
+
 typedef struct {
   char cadena[max_tamano_cadena];
   int tiempo_ejecucion;
