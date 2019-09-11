@@ -16,11 +16,13 @@
 registro* array_temporales[maximo_numero_archivos];
 char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
 int total_lineas;
+int lineas_por_archivo[maximo_numero_archivos];
 
 void *ProcesarArchivo(void *thread_id);
 void RepartirArchivosHilos(int numero_archivos_input);
 registro* UnirRegistros(int numero_archivos_input);
 void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo], bool bandera_orden_reverso);
+void ContarTotalLineas(int numero_archivos_input);
 
 int main (int argc, char **argv) {
 
@@ -81,11 +83,11 @@ int main (int argc, char **argv) {
     total_lineas = 0;
 
     RepartirArchivosHilos(numero_archivos_input);
-
+    ContarTotalLineas(numero_archivos_input);
     array_general = UnirRegistros(numero_archivos_input);
     OrdenarRegistroPorMergeSort(array_general, total_lineas);
     ImprimirResultado(array_general, archivo_output, bandera_orden_reverso);
-    
+
     free(array_general);
     array_general = NULL;
 
@@ -96,23 +98,28 @@ void *ProcesarArchivo(void *thread_id){
 
     int *id_ptr;
     int tarea_id;
-    int numero_lineas_archivo;
+    /*int numero_lineas_archivo;*/
 
     id_ptr = (int *) thread_id;
     tarea_id = *id_ptr;
-    printf("Thread número %d\n", tarea_id);
+    printf("Thread número %d\n", tarea_id+1);
 
-    numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
-    total_lineas = total_lineas + numero_lineas_archivo;
+    lineas_por_archivo[tarea_id] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
+    /*numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ tarea_id ] );*/
 
-    array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], numero_lineas_archivo);
+    /*total_lineas = total_lineas + numero_lineas_archivo;*/
 
-    OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], numero_lineas_archivo);
+    /*array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], numero_lineas_archivo);*/
+    array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[tarea_id] );
+
+    /*OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], numero_lineas_archivo);*/
+    OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id]);
 
     /*QUITAR ESTO AHORITA*/
-    ImprimirArchivo(array_temporales[ tarea_id ], numero_lineas_archivo, array_archivos_input[ tarea_id ], false, true);
+    /*ImprimirArchivo(array_temporales[ tarea_id ], numero_lineas_archivo, array_archivos_input[ tarea_id ], false, true);*/
+    ImprimirArchivo(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], array_archivos_input[ tarea_id ], false, true);
 
-    printf("Termina hilo %d\n", tarea_id);
+    printf("Termina hilo %d\n", tarea_id+1);
     pthread_exit(NULL);
 }
 
@@ -140,6 +147,13 @@ void RepartirArchivosHilos(int numero_archivos_input){
     }
     printf("Todos los hilos han finalizado\n");
     /*pthread_exit(NULL);*/
+}
+
+void ContarTotalLineas(int numero_archivos_input){
+    int i;
+    for(i=0; i<numero_archivos_input; i++){
+        total_lineas = total_lineas + lineas_por_archivo[i];
+    }
 }
 
 registro* UnirRegistros(int numero_archivos_input){
