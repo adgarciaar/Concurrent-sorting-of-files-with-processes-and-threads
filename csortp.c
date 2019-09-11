@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define maximo_nombre_archivo 40
+#define maximo_nombre_archivo 50
 #define maximo_numero_archivos 10
 
 void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso);
@@ -153,6 +153,10 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     int numero_lineas_archivo;
     registro* array_registros = NULL;
     registro* array_temporales = (registro*)malloc(total_lineas*sizeof(registro));
+    if (array_temporales == NULL) {
+        printf("Memory not allocated.\n");
+        exit(1);
+    }
 
     for (i = 0; i < numero_archivos_input; i++) {
         numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );

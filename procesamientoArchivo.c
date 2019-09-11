@@ -171,6 +171,9 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos){
                 strcat(fecha_hora_2, " ");
                 strcat(fecha_hora_2, array_registros[j+1].hora_ejecucion);
 
+                /*printf("Fecha 1: %s\n", fecha_hora_1);
+                printf("Fecha 2: %s\n", fecha_hora_2);*/
+
                 resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
 
                 if( resultado_comparacion_strings > 0 ){
@@ -256,7 +259,15 @@ void merge(registro* array_registros, int l, int m, int r){
     /* create temp arrays */
     /*int L[n1], R[n2];*/
     registro* array_L = (registro*)malloc(n1*sizeof(registro));
+    if (array_L == NULL) {
+        printf("Memory not allocated.\n");
+        exit(1);
+    }
     registro* array_R = (registro*)malloc(n2*sizeof(registro));
+    if (array_R == NULL) {
+        printf("Memory not allocated.\n");
+        exit(1);
+    }
 
     /* Copy data to temp arrays L[] and R[] */
     for (i = 0; i < n1; i++){
