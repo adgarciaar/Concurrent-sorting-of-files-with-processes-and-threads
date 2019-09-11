@@ -109,7 +109,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                 }
                 /* Codigo que ejecutaran los hijos */
                 if (childpid == 0) {
-                    printf("Proceso hijo con pid %d\n", getpid());
+                    printf("Inicia proceso hijo con pid %d\n", getpid());
 
                     numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
                     array_registros = LeerArchivo( array_archivos_input[i], numero_lineas_archivo);
@@ -119,7 +119,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                     array_registros = NULL;
 
                     /*ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);*/
-                    printf("Termina proceso %d\n", getpid());
+                    printf("Termina proceso hijo con pid %d\n", getpid());
                     exit(1);
                 }
         }
@@ -143,7 +143,7 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
         numero_lineas_archivo = ContarLineasArchivo( strcat(array_archivos_input[i],"_temporal") );
         total_lineas = total_lineas + numero_lineas_archivo;
     }
-    printf("Total lineas: %d\n", total_lineas);
+    /*printf("Total lineas: %d\n", total_lineas);*/
     return total_lineas;
 }
 

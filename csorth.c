@@ -13,16 +13,18 @@
 #define maximo_nombre_archivo 50
 #define maximo_numero_archivos 10
 
-registro* array_temporales[maximo_numero_archivos];
-char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
-int total_lineas;
-int lineas_por_archivo[maximo_numero_archivos];
-
 void *ProcesarArchivo(void *thread_id);
 void RepartirArchivosHilos(int numero_archivos_input);
 registro* UnirRegistros(int numero_archivos_input);
 void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo], bool bandera_orden_reverso);
 void ContarTotalLineas(int numero_archivos_input);
+
+registro* array_temporales[maximo_numero_archivos];
+char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
+int total_lineas;
+int lineas_por_archivo[maximo_numero_archivos];
+
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
 int main (int argc, char **argv) {
 
@@ -102,7 +104,7 @@ void *ProcesarArchivo(void *thread_id){
 
     id_ptr = (int *) thread_id;
     tarea_id = *id_ptr;
-    printf("Thread número %d\n", tarea_id+1);
+    printf("Inicia hilo %d\n", tarea_id+1);
 
     lineas_por_archivo[tarea_id] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
     /*numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ tarea_id ] );*/
@@ -110,7 +112,10 @@ void *ProcesarArchivo(void *thread_id){
     /*total_lineas = total_lineas + numero_lineas_archivo;*/
 
     /*array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], numero_lineas_archivo);*/
+
+    pthread_mutex_lock( &mutex1 );
     array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[tarea_id] );
+    pthread_mutex_unlock( &mutex1 );
 
     /*OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], numero_lineas_archivo);*/
     OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id]);
@@ -120,6 +125,7 @@ void *ProcesarArchivo(void *thread_id){
     ImprimirArchivo(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], array_archivos_input[ tarea_id ], false, true);
 
     printf("Termina hilo %d\n", tarea_id+1);
+
     pthread_exit(NULL);
 }
 
