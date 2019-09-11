@@ -33,7 +33,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
       /* Read file line by line */
 
       while (fgets(linea,sizeof(linea),archivo)) {
-          strcpy(array_registros[numero_linea].cadena,linea);
+          strcpy(array_registros[numero_linea].cadena, linea);
           /*printf("%s",array_registros[numero_linea].cadena);*/
           numero_linea = numero_linea + 1;
       }
@@ -49,7 +49,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     for (i = 0; i < numero_lineas_archivo; i++){
 
         strcpy(linea_aux, array_registros[i].cadena);
-
+        
         if( (ptr = strchr(linea_aux, '\n')) != NULL)
           *ptr = '\0';
 

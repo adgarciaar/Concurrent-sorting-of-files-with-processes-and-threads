@@ -106,18 +106,12 @@ void *ProcesarArchivo(void *thread_id){
     tarea_id = *id_ptr;
     printf("Inicia hilo %d\n", tarea_id+1);
 
-    lineas_por_archivo[tarea_id] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
-    /*numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ tarea_id ] );*/
+    /*lineas_por_archivo[tarea_id] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );*/
 
-    /*total_lineas = total_lineas + numero_lineas_archivo;*/
-
-    /*array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], numero_lineas_archivo);*/
-
-    pthread_mutex_lock( &mutex1 );
+    /*pthread_mutex_lock( &mutex1 );
     array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[tarea_id] );
-    pthread_mutex_unlock( &mutex1 );
+    pthread_mutex_unlock( &mutex1 );*/
 
-    /*OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], numero_lineas_archivo);*/
     OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id]);
 
     /*QUITAR ESTO AHORITA*/
@@ -137,6 +131,11 @@ void RepartirArchivosHilos(int numero_archivos_input){
 
     for(i=0; i<maximo_numero_archivos; i++){
         array_temporales[i] = NULL;
+    }
+
+    for(i=0; i<numero_archivos_input; i++){
+        lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
+        array_temporales[ i ] = LeerArchivo( array_archivos_input[ i ], lineas_por_archivo[i] );
     }
 
     for(i=0; i<numero_archivos_input; i++){
