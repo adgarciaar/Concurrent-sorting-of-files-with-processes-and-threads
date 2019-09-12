@@ -13,13 +13,14 @@
 void *ProcesarArchivo(void *thread_id);
 void RepartirArchivosHilos(int numero_archivos_input);
 registro* UnirRegistros(int numero_archivos_input);
-void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo], bool bandera_orden_reverso);
+void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo]);
 void ContarTotalLineas(int numero_archivos_input);
 
 registro* array_temporales[maximo_numero_archivos];
 char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
 int total_lineas;
 int lineas_por_archivo[maximo_numero_archivos];
+bool bandera_orden_reverso;
 
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
@@ -28,7 +29,7 @@ int main (int argc, char **argv) {
     int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
     int i;
     int resultado_comparacion_strings;
-    bool bandera_orden_reverso = false;
+    bandera_orden_reverso = false;
 
     char archivo_output[maximo_nombre_archivo];
     registro* array_temporales = NULL;
@@ -84,8 +85,8 @@ int main (int argc, char **argv) {
     RepartirArchivosHilos(numero_archivos_input);
     ContarTotalLineas(numero_archivos_input);
     array_general = UnirRegistros(numero_archivos_input);
-    OrdenarRegistroPorMergeSort(array_general, total_lineas);
-    ImprimirResultado(array_general, archivo_output, bandera_orden_reverso);
+    OrdenarRegistroPorMergeSort(array_general, total_lineas, bandera_orden_reverso);
+    ImprimirResultado(array_general, archivo_output);
 
     free(array_general);
     array_general = NULL;
@@ -109,7 +110,7 @@ void *ProcesarArchivo(void *thread_id){
     array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[tarea_id] );
     pthread_mutex_unlock( &mutex1 );*/
 
-    OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id]);
+    OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], bandera_orden_reverso);
 
     /*QUITAR ESTO AHORITA*/
 
@@ -197,6 +198,6 @@ registro* UnirRegistros(int numero_archivos_input){
 
 }
 
-void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo], bool bandera_orden_reverso){
-    ImprimirArchivo(array_general, total_lineas, archivo_output, bandera_orden_reverso, false);
+void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo]){
+    ImprimirArchivo(array_general, total_lineas, archivo_output, false);
 }

@@ -7,30 +7,25 @@
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
     FILE * archivo;
-
     char linea[max_tamano_cadena];
     char linea_aux[max_tamano_cadena];
-
     char delim[] = " ";
     int contador = 0;
     int numero_linea = 0;
     int i = 0;
     char *item;
     char *ptr;
-
-    /*int numero_lineas_archivo = ContarLineasArchivo( nombre_archivo ); */
-
     registro* array_registros = (registro*)malloc(numero_lineas_archivo*sizeof(registro));
 
     if (array_registros == NULL) {
-        printf("Memory not allocated.\n");
+        printf("Memoria no alocada para las filas del log.\n");
         exit(1);
     }
 
     archivo = fopen( nombre_archivo ,"r");
 
     if ( archivo != NULL ){
-      /* Read file line by line */
+      /* Leer cada línea del archivo y almacenarla en array de registro */
 
       while (fgets(linea,sizeof(linea),archivo)) {
           strcpy(array_registros[numero_linea].cadena, linea);
@@ -110,7 +105,7 @@ int ContarLineasArchivo(char nombre_archivo[]){
     return count;
 }
 
-void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos){
+void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
     int i = 0, j = 0;
     int resultado_comparacion_strings;
@@ -130,125 +125,178 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos){
 
       for (j = 0; j < numero_elementos-i-1; j++){
 
-        if(array_registros[j].tiempo_ejecucion > array_registros[j+1].tiempo_ejecucion){
+        if (bandera_orden_reverso == false){ /*Se va a ordenar de menor a mayor*/
 
-            /*Hay que intercabiar los elementos para que quede primero el menor*/
+            if(array_registros[j].tiempo_ejecucion > array_registros[j+1].tiempo_ejecucion){
 
-            /*Salvar los datos del que tiene menor tiempo de ejecución*/
-            strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
-            registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
-            strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
-            strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
+                /*Hay que intercabiar los elementos para que quede primero el menor*/
 
-            /*Cambiar elemento con menor tiempo por el otro*/
-            strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
-            array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
-            strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
-            strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
+                /*Salvar los datos del que tiene menor tiempo de ejecución*/
+                strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
+                registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
+                strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
+                strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
 
-            /*Guardar los datos temporales para terminar intercambio*/
-            strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
-            array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
-            strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
-            strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
+                /*Cambiar elemento con menor tiempo por el otro*/
+                strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
+                array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
+                strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
+                strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
+
+                /*Guardar los datos temporales para terminar intercambio*/
+                strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
+                array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
+                strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
+                strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
 
 
-        }else{
-            /*if(array_registros[i].tiempo_ejecucion < array_registros[i+1].tiempo_ejecucion){*/
+            }else{
 
-              /*Hay que intercambiar los elementos para que quede primero */
+                if(array_registros[j].tiempo_ejecucion == array_registros[j+1].tiempo_ejecucion){
+                    /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
 
-            /*}else{*/
+                    strcpy(fecha_hora_1, array_registros[j].fecha_ejecucion);
+                    strcat(fecha_hora_1, " ");
+                    strcat(fecha_hora_1, array_registros[j].hora_ejecucion);
 
-            if(array_registros[j].tiempo_ejecucion == array_registros[j+1].tiempo_ejecucion){
-                /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
 
-                strcpy(fecha_hora_1, array_registros[j].fecha_ejecucion);
-                strcat(fecha_hora_1, " ");
-                strcat(fecha_hora_1, array_registros[j].hora_ejecucion);
-                /*printf("%s\n",fecha_hora_1);*/
+                    strcpy(fecha_hora_2, array_registros[j+1].fecha_ejecucion);
+                    strcat(fecha_hora_2, " ");
+                    strcat(fecha_hora_2, array_registros[j+1].hora_ejecucion);
 
-                strcpy(fecha_hora_2, array_registros[j+1].fecha_ejecucion);
-                strcat(fecha_hora_2, " ");
-                strcat(fecha_hora_2, array_registros[j+1].hora_ejecucion);
+                    resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
 
-                /*printf("Fecha 1: %s\n", fecha_hora_1);
-                printf("Fecha 2: %s\n", fecha_hora_2);*/
+                    if( resultado_comparacion_strings > 0 ){
+                      /*Si el elemento siguiente es mayor en fecha u hora*/
 
-                resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
+                      /*Hay que intercabiar los elementos para que quede primero el menor*/
 
-                if( resultado_comparacion_strings > 0 ){
-                  /*Si el elemento siguiente es mayor en fecha u hora*/
+                      /*Salvar los datos del que tiene menor tiempo de ejecución*/
+                      strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
+                      registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
+                      strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
+                      strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
 
-                  /*Hay que intercabiar los elementos para que quede primero el menor*/
+                      /*Cambiar elemento con menor tiempo por el otro*/
+                      strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
+                      array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
+                      strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
+                      strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
 
-                  /*Salvar los datos del que tiene menor tiempo de ejecución*/
-                  strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
-                  registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
-                  strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
-                  strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
+                      /*Guardar los datos temporales para terminar intercambio*/
+                      strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
+                      array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
+                      strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
+                      strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
 
-                  /*Cambiar elemento con menor tiempo por el otro*/
-                  strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
-                  array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
-                  strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
-                  strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
+                    }
 
-                  /*Guardar los datos temporales para terminar intercambio*/
-                  strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
-                  array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
-                  strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
-                  strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
-
-                /*}else{
-                    if( resultado_comparacion_strings < 0 ){
-                */
                 }
-
-                /*}*/
-
             }
+
+        }else{ /*Se va a ordenar de mayor a menor*/
+
+          if(array_registros[j].tiempo_ejecucion < array_registros[j+1].tiempo_ejecucion){
+
+              /*Hay que intercabiar los elementos para que quede primero el mayor*/
+
+              /*Salvar los datos del que tiene mayor tiempo de ejecución*/
+              strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
+              registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
+              strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
+              strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
+
+              /*Cambiar elemento con mayor tiempo por el otro*/
+              strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
+              array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
+              strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
+              strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
+
+              /*Guardar los datos temporales para terminar intercambio*/
+              strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
+              array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
+              strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
+              strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
+
+
+          }else{
+
+              if(array_registros[j].tiempo_ejecucion == array_registros[j+1].tiempo_ejecucion){
+                  /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
+
+                  strcpy(fecha_hora_1, array_registros[j].fecha_ejecucion);
+                  strcat(fecha_hora_1, " ");
+                  strcat(fecha_hora_1, array_registros[j].hora_ejecucion);
+
+
+                  strcpy(fecha_hora_2, array_registros[j+1].fecha_ejecucion);
+                  strcat(fecha_hora_2, " ");
+                  strcat(fecha_hora_2, array_registros[j+1].hora_ejecucion);
+
+                  resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
+
+                  if( resultado_comparacion_strings < 0 ){
+                    /*Si el elemento siguiente es menor en fecha u hora*/
+
+                    /*Hay que intercabiar los elementos para que quede primero el menor*/
+
+                    /*Salvar los datos del que tiene menor tiempo de ejecución*/
+                    strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
+                    registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
+                    strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
+                    strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
+
+                    /*Cambiar elemento con menor tiempo por el otro*/
+                    strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
+                    array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
+                    strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
+                    strcpy(array_registros[j+1].hora_ejecucion, array_registros[j].hora_ejecucion);
+
+                    /*Guardar los datos temporales para terminar intercambio*/
+                    strcpy(array_registros[j].cadena, registro_auxiliar.cadena);
+                    array_registros[j].tiempo_ejecucion = registro_auxiliar.tiempo_ejecucion;
+                    strcpy(array_registros[j].fecha_ejecucion, registro_auxiliar.fecha_ejecucion);
+                    strcpy(array_registros[j].hora_ejecucion, registro_auxiliar.hora_ejecucion);
+
+                  }
+
+              }
+          }
+
         }
+
+
       }
     }
 
-    /*for (i = 0; i < numero_elementos; i++){
-      printf("Contador:%d\n",i);
-      printf("%s",array_registros[i].cadena);
-      printf("%d ",array_registros[i].tiempo_ejecucion);
-      printf("%s ",array_registros[i].fecha_ejecucion);
-      printf("%s\n",array_registros[i].hora_ejecucion);
-    }*/
-
 }
 
-void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos){
+void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
-    mergeSort(array_registros, 0, numero_elementos - 1);
+    mergeSort(array_registros, 0, numero_elementos - 1, bandera_orden_reverso);
 
 }
 
 /* l is for left index and r is right index of the
    sub-array of arr to be sorted */
-void mergeSort(registro* array_registros, int l, int r){
-    if (l < r)
-    {
-        /* Same as (l+r)/2, but avoids overflow for
-        /* large l and h */
+void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso){
+    if (l < r){
+        /* Same as (l+r)/2, but avoids overflow for large l and h */
         int m = l+(r-l)/2;
 
         /* Sort first and second halves*/
-        mergeSort(array_registros, l, m);
-        mergeSort(array_registros, m+1, r);
+        mergeSort(array_registros, l, m, bandera_orden_reverso);
+        mergeSort(array_registros, m+1, r, bandera_orden_reverso);
 
-        merge(array_registros, l, m, r);
+        merge(array_registros, l, m, r, bandera_orden_reverso);
     }
 }
 
 /* Merges two subarrays of arr[].
 // First subarray is arr[l..m]
 // Second subarray is arr[m+1..r] */
-void merge(registro* array_registros, int l, int m, int r){
+void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso){
+
     int i, j, k;
     int n1 = m - l + 1;
     int n2 =  r - m;
@@ -293,58 +341,22 @@ void merge(registro* array_registros, int l, int m, int r){
     k = l; /* Initial index of merged subarray */
     while (i < n1 && j < n2)
     {
-        /*if (L[i] <= R[j]) /*de menor a mayor*/
-        if (array_L[i].tiempo_ejecucion < array_R[j].tiempo_ejecucion)
-        {
 
-            strcpy(array_registros[k].cadena, array_L[i].cadena);
-            array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
-            strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
-            strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
+        if (bandera_orden_reverso == false){ /*Se va a ordenar de menor a mayor*/
 
-            /* arr[k] = L[i]; */
-            i++;
-        }
-        else
-        {
+            /*if (L[i] <= R[j]) /*de menor a mayor*/
+            if (array_L[i].tiempo_ejecucion < array_R[j].tiempo_ejecucion){
 
-            if (array_L[i].tiempo_ejecucion > array_R[j].tiempo_ejecucion){
+                strcpy(array_registros[k].cadena, array_L[i].cadena);
+                array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
+                strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
+                strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
 
-                strcpy(array_registros[k].cadena, array_R[j].cadena);
-                array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
-                strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
-                strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
-
-                /* arr[k] = R[j]; */
-                j++;
-                /*Hasta acá MergeSort con base en un sóla variable*/
-
+                /* arr[k] = L[i]; */
+                i++;
             }else{
-                /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
 
-                strcpy(fecha_hora_1, array_L[i].fecha_ejecucion);
-                strcat(fecha_hora_1, " ");
-                strcat(fecha_hora_1, array_L[i].hora_ejecucion);
-                /*printf("%s\n",fecha_hora_1);*/
-
-                strcpy(fecha_hora_2, array_R[j].fecha_ejecucion);
-                strcat(fecha_hora_2, " ");
-                strcat(fecha_hora_2, array_R[j].hora_ejecucion);
-
-                resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
-
-                if( resultado_comparacion_strings < 0 ){
-                  /*Si el elemento siguiente es mayor en fecha u hora*/
-
-                    strcpy(array_registros[k].cadena, array_L[i].cadena);
-                    array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
-                    strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
-                    strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
-
-                    /* arr[k] = L[i]; */
-                    i++;
-
-                }else{
+                if (array_L[i].tiempo_ejecucion > array_R[j].tiempo_ejecucion){
 
                     strcpy(array_registros[k].cadena, array_R[j].cadena);
                     array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
@@ -353,11 +365,113 @@ void merge(registro* array_registros, int l, int m, int r){
 
                     /* arr[k] = R[j]; */
                     j++;
+                    /*Hasta acá MergeSort con base en un sóla variable*/
 
+                }else{
+                    /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
+
+                    strcpy(fecha_hora_1, array_L[i].fecha_ejecucion);
+                    strcat(fecha_hora_1, " ");
+                    strcat(fecha_hora_1, array_L[i].hora_ejecucion);
+                    /*printf("%s\n",fecha_hora_1);*/
+
+                    strcpy(fecha_hora_2, array_R[j].fecha_ejecucion);
+                    strcat(fecha_hora_2, " ");
+                    strcat(fecha_hora_2, array_R[j].hora_ejecucion);
+
+                    resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
+
+                    if( resultado_comparacion_strings < 0 ){
+                      /*Si el elemento siguiente es mayor en fecha u hora*/
+
+                        strcpy(array_registros[k].cadena, array_L[i].cadena);
+                        array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
+                        strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
+                        strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
+
+                        /* arr[k] = L[i]; */
+                        i++;
+
+                    }else{
+
+                        strcpy(array_registros[k].cadena, array_R[j].cadena);
+                        array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
+                        strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
+                        strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+
+                        /* arr[k] = R[j]; */
+                        j++;
+
+                    }
                 }
             }
 
+        }else{ /*Se va a ordenar de mayor a menor*/
+
+          if (array_L[i].tiempo_ejecucion > array_R[j].tiempo_ejecucion){
+
+              strcpy(array_registros[k].cadena, array_L[i].cadena);
+              array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
+              strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
+              strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
+
+              /* arr[k] = L[i]; */
+              i++;
+          }else{
+
+              if (array_L[i].tiempo_ejecucion < array_R[j].tiempo_ejecucion){
+
+                  strcpy(array_registros[k].cadena, array_R[j].cadena);
+                  array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
+                  strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
+                  strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+
+                  /* arr[k] = R[j]; */
+                  j++;
+                  /*Hasta acá MergeSort con base en un sóla variable*/
+
+              }else{
+                  /*Si los tiempos de ejecución son iguales, entonces desempatar por lo siguiente*/
+
+                  strcpy(fecha_hora_1, array_L[i].fecha_ejecucion);
+                  strcat(fecha_hora_1, " ");
+                  strcat(fecha_hora_1, array_L[i].hora_ejecucion);
+                  /*printf("%s\n",fecha_hora_1);*/
+
+                  strcpy(fecha_hora_2, array_R[j].fecha_ejecucion);
+                  strcat(fecha_hora_2, " ");
+                  strcat(fecha_hora_2, array_R[j].hora_ejecucion);
+
+                  resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
+
+                  if( resultado_comparacion_strings > 0 ){
+                    /*Si el elemento siguiente es mayor en fecha u hora*/
+
+                      strcpy(array_registros[k].cadena, array_L[i].cadena);
+                      array_registros[k].tiempo_ejecucion = array_L[i].tiempo_ejecucion;
+                      strcpy(array_registros[k].fecha_ejecucion, array_L[i].fecha_ejecucion);
+                      strcpy(array_registros[k].hora_ejecucion, array_L[i].hora_ejecucion);
+
+                      /* arr[k] = L[i]; */
+                      i++;
+
+                  }else{
+
+                      strcpy(array_registros[k].cadena, array_R[j].cadena);
+                      array_registros[k].tiempo_ejecucion = array_R[j].tiempo_ejecucion;
+                      strcpy(array_registros[k].fecha_ejecucion, array_R[j].fecha_ejecucion);
+                      strcpy(array_registros[k].hora_ejecucion, array_R[j].hora_ejecucion);
+
+                      /* arr[k] = R[j]; */
+                      j++;
+
+                  }
+              }
+          }
+
         }
+
+
         k++;
     }
 
@@ -394,7 +508,7 @@ void merge(registro* array_registros, int l, int m, int r){
     free(array_R);
 }
 
-void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool bandera_orden_reverso, bool temporal){
+void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool temporal){
 
      int i = 0;
      FILE *fptr;
@@ -414,18 +528,18 @@ void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombr
         exit(1);
      }
 
-     if( bandera_orden_reverso == false ){  /*De menor a mayor*/
+     /*if( bandera_orden_reverso == false ){  /*De menor a mayor*/
 
          for (i = 0; i < numero_elementos; i++){
               fprintf(fptr,"%s", array_registros[i].cadena);
          }
 
-     }else{ /*De mayor a menor*/
+     /*}else{ /*De mayor a menor
 
          for (i = numero_elementos; i > -1; i--){
               fprintf(fptr,"%s", array_registros[i].cadena);
          }
-     }
+     /*}*/
 
      fclose(fptr);
 

@@ -10,7 +10,7 @@
 void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso);
 registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo], int total_lineas);
 int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]);
-void ImprimirResultado( registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso );
+void ImprimirResultado( registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas );
 void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]);
 
 int main (int argc, char **argv) {
@@ -73,8 +73,8 @@ int main (int argc, char **argv) {
     int total_lineas = ContarTotalLineasTemporales( numero_archivos_input, array_archivos_input );
     array_temporales =  LeerArchivosTemporales( numero_archivos_input, array_archivos_input, total_lineas );
     BorrarTemporales( numero_archivos_input, array_archivos_input );
-    OrdenarRegistroPorMergeSort(array_temporales, total_lineas);
-    ImprimirResultado( array_temporales, archivo_output, total_lineas, bandera_orden_reverso );
+    OrdenarRegistroPorMergeSort(array_temporales, total_lineas, bandera_orden_reverso);
+    ImprimirResultado( array_temporales, archivo_output, total_lineas );
 
     free(array_temporales);
     array_temporales = NULL;
@@ -104,8 +104,8 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
             exit(1);
         }*/
         array_registros = LeerArchivo( array_archivos_input[0], lineas_por_archivo[0]);
-        OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[0]);
-        ImprimirArchivo(array_registros, lineas_por_archivo[0], array_archivos_input[0], false, true);
+        OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[0], bandera_orden_reverso);
+        ImprimirArchivo(array_registros, lineas_por_archivo[0], array_archivos_input[0], true);
         free(array_registros);
         array_registros = NULL;
 
@@ -126,8 +126,8 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
                         exit(1);
                     }*/
                     array_registros = LeerArchivo( array_archivos_input[i], lineas_por_archivo[i]);
-                    OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[i]);
-                    ImprimirArchivo(array_registros, lineas_por_archivo[i], array_archivos_input[i], false, true);
+                    OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[i], bandera_orden_reverso);
+                    ImprimirArchivo(array_registros, lineas_por_archivo[i], array_archivos_input[i], true);
                     free(array_registros);
                     array_registros = NULL;
 
@@ -226,8 +226,8 @@ void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][max
 
 }
 
-void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas, bool bandera_orden_reverso){
+void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas){
 
-    ImprimirArchivo(array_temporales, total_lineas, archivo_output, bandera_orden_reverso, false);
+    ImprimirArchivo(array_temporales, total_lineas, archivo_output, false);
 
 }
