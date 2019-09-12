@@ -1,3 +1,11 @@
+/*
+Nombre del archivo: csortpexec.h
+Autores: Adrián García y Luis Rosales
+Objetivo: proveer los prototipos de las funciones que usa el comando csortpexec
+Funciones:
+Fecha de finalización: 12/09/19
+*/
+
 #include "procesamientoArchivo.h"
 #include <stdbool.h>
 

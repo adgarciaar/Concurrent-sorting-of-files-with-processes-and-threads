@@ -1,9 +1,24 @@
+/*
+Nombre del archivo: procesamientoArchivo.c
+Autores: Adrián García y Luis Rosales
+Objetivo: proveer la implementación para procesar cada archivo de entrada en
+los comandos csortp, csorth y csortpexec.
+Funciones:
+Fecha de finalización: 12/09/19
+*/
+
 #include "procesamientoArchivo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
     FILE *archivo;
@@ -20,7 +35,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     if (array_registros == NULL) {
         printf("Memoria no alocada para las filas del log.\n");
         exit(1);
-    }
+    }/*end if*/
 
     archivo = fopen( nombre_archivo ,"r");
 
@@ -31,22 +46,23 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
           strcpy(array_registros[numero_linea].cadena, linea);
           /*printf("%s",array_registros[numero_linea].cadena);*/
           numero_linea = numero_linea + 1;
-      }
+      }/*end while*/
       fclose(archivo);/* Close file */
 
     }else{
        free(array_registros);
        perror ( nombre_archivo ); /* why didn't the file open? */
        exit(1);
-    }
+    }/*end if*/
 
 
     for (i = 0; i < numero_lineas_archivo; i++){
 
         strcpy(linea_aux, array_registros[i].cadena);
 
-        if( (caracter_aux = strchr(linea_aux, '\n')) != NULL)
-          *caracter_aux = '\0';
+        if( (caracter_aux = strchr(linea_aux, '\n')) != NULL){
+            *caracter_aux = '\0';
+        }/*end if*/
 
         item = strtok(linea_aux, delimitador);
         contador = 1;
@@ -56,27 +72,33 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
             if (contador == 4){
                 array_registros[i].tiempo_ejecucion = atoi(item);
                 /*printf("%d\n",array_registros[i].tiempo_ejecucion);*/
-            }
+            }/*end if*/
             if (contador == 5){
                 strcpy(array_registros[i].fecha_ejecucion,item);
                 /*printf("%s\n",array_registros[i].fecha_ejecucion);*/
-            }
+            }/*end if*/
             if (contador == 6){
                 strcpy(array_registros[i].hora_ejecucion,item);
                 /*printf("%s\n",array_registros[i].hora_ejecucion);*/
                 item = NULL;
-            }
+            }/*end if*/
 
             contador = contador+1;
             item = strtok(NULL, delimitador);
-        }
+        }/*end while*/
 
-    }
+    }/*end for*/
 
     return array_registros;
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 int ContarLineasArchivo(char nombre_archivo[]){
     FILE *archivo;
     int contador_lineas = 0;  /* Line counter (result) */
@@ -91,12 +113,14 @@ int ContarLineasArchivo(char nombre_archivo[]){
         perror ( nombre_archivo ); /* why didn't the file open? */
         /*exit(1);*/
         return 0;
-    }
+    }/*end if*/
 
     /* Extract characters from file and store in character c */
-    for (caracter = getc(archivo); caracter != EOF; caracter = getc(archivo))
-        if (caracter == '\n') /* Increment count if this character is newline */
+    for (caracter = getc(archivo); caracter != EOF; caracter = getc(archivo)){
+        if (caracter == '\n'){ /* Increment count if this character is newline */
             contador_lineas = contador_lineas + 1;
+        }/*end if*/
+    }/*end for*/
 
     /* Close the file */
     fclose(archivo);
@@ -105,6 +129,12 @@ int ContarLineasArchivo(char nombre_archivo[]){
     return contador_lineas;
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void IntercambiarElementosArreglo(registro* array_registros, int j){
 
     registro registro_auxiliar;
@@ -129,6 +159,12 @@ void IntercambiarElementosArreglo(registro* array_registros, int j){
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
     int i = 0, j = 0;
@@ -166,10 +202,10 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
                       /*Si el elemento siguiente es mayor en fecha u hora*/
                       /*Hay que intercabiar los elementos para que quede primero el menor*/
                       IntercambiarElementosArreglo(array_registros, j);
-                    }
+                    }/*end if*/
 
-                }
-            }
+                }/*end if*/
+            }/*end if*/
 
         }else{ /*Se va a ordenar de mayor a menor*/
 
@@ -197,21 +233,32 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
                     /*Si el elemento siguiente es menor en fecha u hora*/
                     /*Hay que intercabiar los elementos para que quede primero el menor*/
                     IntercambiarElementosArreglo(array_registros, j);
-                  }
-              }
-          }
-        }
-      }
-    }
-
+                  }/*end if*/
+              }/*end if*/
+          }/*end if*/
+        }/*end if*/
+      }/*end for*/
+    }/*end for*/
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
     mergeSort(array_registros, 0, numero_elementos - 1, bandera_orden_reverso);
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 /* l is for left index and r is right index of the
    sub-array of arr to be sorted */
 void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso){
@@ -224,9 +271,15 @@ void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_rever
         mergeSort(array_registros, m+1, r, bandera_orden_reverso);
 
         merge(array_registros, l, m, r, bandera_orden_reverso);
-    }
+    }/*end if*/
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1, int posicion2){
 
       strcpy(arreglo1[posicion1].cadena, arreglo2[posicion2].cadena);
@@ -236,6 +289,12 @@ void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 /* Merges two subarrays of arr[].
 // First subarray is arr[l..m]
 // Second subarray is arr[m+1..r] */
@@ -257,23 +316,23 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
     if (array_L == NULL) {
         printf("Memoria no alocada.\n");
         exit(1);
-    }
+    }/*end if*/
 
     if (array_R == NULL) {
         printf("Memoria no alocada.\n");
         exit(1);
-    }
+    }/*end if*/
 
     /* Copy data to temp arrays L[] and R[] */
     for (i = 0; i < n1; i++){
         /* L[i] = arr[l + i]; */
         CopiarElementoArreglo(array_L, array_registros, i, l + i);
-    }
+    }/*end for*/
 
     for (j = 0; j < n2; j++){
         /* R[j] = arr[m + 1+ j]; */
         CopiarElementoArreglo(array_R, array_registros, j, m + 1 + j);
-    }
+    }/*end for*/
 
     /* Merge the temp arrays back into arr[l..r]*/
     i = 0; /* Initial index of first subarray */
@@ -318,7 +377,7 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
                     }
                 }
             }
-            
+
         }else{ /*Se va a ordenar de mayor a menor*/
 
           if (array_L[i].tiempo_ejecucion > array_R[j].tiempo_ejecucion){
@@ -351,12 +410,12 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
                       /* arr[k] = R[j]; */
                       CopiarElementoArreglo(array_registros, array_R, k, j);
                       j++;
-                  }
-              }
-          }
-        }
+                  }/*end if*/
+              }/*end if*/
+          }/*end if*/
+        }/*end if*/
         k++;
-    }
+    }/*end while*/
     /* Copy the remaining elements of L[], if there
        are any */
     while (i < n1){
@@ -364,7 +423,7 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
         CopiarElementoArreglo(array_registros, array_L, k, i);
         i++;
         k++;
-    }
+    }/*end while*/
     /* Copy the remaining elements of R[], if there
        are any */
     while (j < n2){
@@ -372,11 +431,17 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
         CopiarElementoArreglo(array_registros, array_R, k, j);
         j++;
         k++;
-    }
+    }/*end while*/
     free(array_L);
     free(array_R);
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool temporal){
 
      int i = 0;
@@ -387,7 +452,7 @@ void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombr
 
      if (temporal == true){
         strcat(archivo_nombre,"_temporal");
-     }
+     }/*end if*/
 
      archivo = fopen(archivo_nombre, "w");
 
@@ -395,11 +460,11 @@ void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombr
         perror( archivo_nombre );
         free(array_registros);
         exit(1);
-     }
+     }/*end if*/
 
      for (i = 0; i < numero_elementos; i++){
         fprintf(archivo,"%s", array_registros[i].cadena);
-     }
+     }/*end for*/
 
      fclose(archivo);
 

@@ -1,3 +1,14 @@
+/*
+Nombre del archivo: procesamientoArchivo.h
+Autores: Adrián García y Luis Rosales
+Objetivo: proveer los prototipos de las funciones que procesan cada archivo de
+entrada, definir constantes que se usan para la declaración de varios arreglos
+y definir la estructura "registro" la cual permite almacenar cada fila de un
+archivo de entrada (log).
+Funciones:
+Fecha de finalización: 12/09/19
+*/
+
 #include <stdbool.h>
 
 #define MAX_TAMANO_CADENA 255

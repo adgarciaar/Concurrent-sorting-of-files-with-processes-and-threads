@@ -1,3 +1,11 @@
+/*
+Nombre del archivo: csortp.c
+Autores: Adrián García y Luis Rosales
+Objetivo: proveer la implementación para ejecutar el comando csortp
+Funciones:
+Fecha de finalización: 12/09/19
+*/
+
 #include "csortp.h"
 #include <string.h>
 #include <stdio.h>
@@ -6,6 +14,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int numero_archivos_input, bool bandera_orden_reverso){
 
     int status, i,nprocesos=numero_archivos_input;
@@ -18,8 +32,8 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
         lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
         if (lineas_por_archivo[i] == 0){
             exit(1);
-        }
-    }
+        }/*end if*/
+    }/*end for*/
 
     if(nprocesos == 1){
 
@@ -39,7 +53,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
                 if ((childpid = fork()) < 0) {
                     perror("fork:");
                     exit(1);
-                }
+                }/*end if*/
                 /* Codigo que ejecutaran los hijos */
                 if (childpid == 0) {
                     printf("Inicia proceso hijo con pid %d\n", getpid());
@@ -58,18 +72,24 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
                     /*ProcesarArchivo(array_archivos_input[i], bandera_orden_reverso);*/
                     printf("Termina proceso hijo con pid %d\n", getpid());
                     exit(1);
-                }
-        }
+                }/*end if*/
+        }/*end for*/
         /* El padre espera por los hijos */
         for (i = 0; i < nprocesos; ++i){
             wait(&status);
-        }
+        }/*end for*/
 
         printf("Todos los procesos hijos han finalizado\n");
-    }
+    }/*end if*/
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
 
     int total_lineas = 0;
@@ -85,13 +105,19 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
         if(numero_lineas_archivo==0){
             BorrarTemporales(numero_archivos_input, array_archivos_input);
             exit(1);
-        }
+        }/*end if*/
         total_lineas = total_lineas + numero_lineas_archivo;
-    }
+    }/*end for*/
     /*printf("Total lineas: %d\n", total_lineas);*/
     return total_lineas;
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
 
     int i, j, k = 0;
@@ -103,7 +129,7 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     if (array_temporales == NULL) {
         printf("Memory not allocated.\n");
         exit(1);
-    }
+    }/*end if*/
 
     for (i = 0; i < numero_archivos_input; i++) {
         strcpy(archivo_nombre, array_archivos_input[i]);
@@ -115,7 +141,7 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
             /*printf("%s\n", "Problema leyendo archivos temporales.");*/
             BorrarTemporales(numero_archivos_input, array_archivos_input);
             exit(1);
-        }
+        }/*end if*/
 
         array_registros = LeerArchivo( archivo_nombre, numero_lineas_archivo);
 
@@ -125,15 +151,21 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
             strcpy(array_temporales[k].fecha_ejecucion, array_registros[j].fecha_ejecucion);
             strcpy(array_temporales[k].hora_ejecucion, array_registros[j].hora_ejecucion);
             k = k + 1;
-        }
+        }/*end for*/
         free(array_registros);
         array_registros = NULL;
 
-    }
+    }/*end for*/
 
     return array_temporales;
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
     int status;
     int i;
@@ -145,17 +177,29 @@ void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAX
         status = remove( archivo_nombre );
         if( status != 0 ){
             perror( archivo_nombre );
-        }
-    }
+        }/*end if*/
+    }/*end for*/
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 void ImprimirResultado(registro* array_temporales, char archivo_output[MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
 
     ImprimirArchivo(array_temporales, total_lineas, archivo_output, false);
 
 }
 
+/*
+Autores de la función:
+Parámetros de entrada:
+Retorno:
+Descripción:
+*/
 int main (int argc, char **argv) {
 
     int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
@@ -173,7 +217,7 @@ int main (int argc, char **argv) {
         /*No puede haber menos de 3 argumentos (3 mínimo)*/
         printf("Error con numero de argumentos\n");
         exit(1);
-    }
+    }/*end if*/
 
     /*
     for (i = 0; i < argc; i++){
@@ -182,17 +226,17 @@ int main (int argc, char **argv) {
     resultado_comparacion_strings = strcmp("-r", argv[1]);
     if( resultado_comparacion_strings == 0 ){
         bandera_orden_reverso = true;
-    }
+    }/*end if*/
     if (bandera_orden_reverso == true && argc == 3){
         /*Si se ingresó flag -r pero sólo hay 3 argumentos significa que falta el archivo output*/
         printf("Error con numero de argumentos\n");
         exit(1);
-    }
+    }/*end if*/
     if (bandera_orden_reverso == false && argc == 13){
         /*Si no se ingresó flag -r y hay 13 argumentos significa que se introdujo un archivo de más*/
         printf("Error con numero de argumentos\n");
         exit(1);
-    }
+    }/*end if*/
 
     for (i = 1; i < argc-1; i++){
         resultado_comparacion_strings = strcmp("-r", argv[i]);
@@ -201,8 +245,8 @@ int main (int argc, char **argv) {
             strcpy(array_archivos_input[numero_archivos_input], argv[i]);
             /*printf("%s\n", array_archivos_input[i]);*/
             numero_archivos_input = numero_archivos_input+1;
-        }
-    }
+        }/*end if*/
+    }/*end for*/
 
     /*for (i = 0; i < numero_archivos_input; i++){
         printf("%s\n", array_archivos_input[i]);
