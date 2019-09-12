@@ -15,8 +15,10 @@ typedef struct {
 
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo);
 int ContarLineasArchivo(char nombre_archivo[]);
+void IntercambiarElementosArreglo(registro* array_registros, int j);
 void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, bool bandera_orden_reverso);
 void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos, bool bandera_orden_reverso);
 void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool temporal);
 void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso);
+void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1, int posicion2);
 void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso);
