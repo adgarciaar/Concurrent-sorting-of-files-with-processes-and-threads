@@ -3,7 +3,7 @@ Nombre del archivo: csortpexec.c
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para ejecutar el comando csortpexec
 Funciones:
-Fecha de finalización: 12/09/19
+Fecha de última modificación: 12/09/19
 */
 
 #include "csortpexec.h"
@@ -15,6 +15,7 @@ Fecha de finalización: 12/09/19
 #include <sys/wait.h>
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -104,6 +105,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -132,6 +134,7 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -180,6 +183,7 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -202,6 +206,7 @@ void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAX
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -214,6 +219,7 @@ void ImprimirResultado(registro* array_temporales, char archivo_output[MAXIMO_NO
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:

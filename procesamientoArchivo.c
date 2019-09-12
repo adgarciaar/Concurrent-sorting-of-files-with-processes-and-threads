@@ -4,7 +4,7 @@ Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para procesar cada archivo de entrada en
 los comandos csortp, csorth y csortpexec.
 Funciones:
-Fecha de finalización: 12/09/19
+Fecha de última modificación: 12/09/19
 */
 
 #include "procesamientoArchivo.h"
@@ -14,6 +14,7 @@ Fecha de finalización: 12/09/19
 #include <stdbool.h>
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -94,6 +95,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -130,6 +132,7 @@ int ContarLineasArchivo(char nombre_archivo[]){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -160,6 +163,7 @@ void IntercambiarElementosArreglo(registro* array_registros, int j){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -242,6 +246,7 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -254,6 +259,7 @@ void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -275,6 +281,7 @@ void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_rever
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -290,6 +297,7 @@ void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -437,6 +445,7 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:

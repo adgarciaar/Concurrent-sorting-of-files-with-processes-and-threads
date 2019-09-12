@@ -6,7 +6,7 @@ entrada, definir constantes que se usan para la declaración de varios arreglos
 y definir la estructura "registro" la cual permite almacenar cada fila de un
 archivo de entrada (log).
 Funciones:
-Fecha de finalización: 12/09/19
+Fecha de última modificación: 12/09/19
 */
 
 #include <stdbool.h>

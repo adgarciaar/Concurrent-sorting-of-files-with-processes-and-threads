@@ -3,7 +3,7 @@ Nombre del archivo: csortp.h
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer los prototipos de las funciones que usa el comando csortp
 Funciones:
-Fecha de finalización: 12/09/19
+Fecha de última modificación: 12/09/19
 */
 
 #include "procesamientoArchivo.h"

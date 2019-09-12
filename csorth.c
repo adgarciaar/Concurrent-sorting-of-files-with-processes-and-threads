@@ -3,7 +3,7 @@ Nombre del archivo: csorth.c
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para ejecutar el comando csorth
 Funciones:
-Fecha de finalización: 12/09/19
+Fecha de última modificación: 12/09/19
 */
 
 #include "csorth.h"
@@ -17,6 +17,7 @@ Fecha de finalización: 12/09/19
 #include <limits.h>
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -51,6 +52,7 @@ void *ProcesarArchivo(void *thread_id){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -92,6 +94,7 @@ void RepartirArchivosHilos(int numero_archivos_input){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -106,6 +109,7 @@ void ContarTotalLineas(int numero_archivos_input){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -149,6 +153,7 @@ registro* UnirRegistros(int numero_archivos_input){
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
@@ -159,6 +164,7 @@ void ImprimirResultado(registro* array_general, char archivo_output[MAXIMO_NOMBR
 }
 
 /*
+Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
