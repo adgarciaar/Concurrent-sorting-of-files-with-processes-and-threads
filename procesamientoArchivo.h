@@ -1,16 +1,16 @@
 #include <stdbool.h>
 
-#define max_tamano_cadena 255
-#define tamano_fila_fecha_hora 9
+#define MAX_TAMANO_CADENA 255
+#define TAMANO_FILA_FECHA_HORA 9
 
-#define maximo_nombre_archivo 200
-#define maximo_numero_archivos 10
+#define MAXIMO_NOMBRE_ARCHIVO 200
+#define MAXIMO_NUMERO_ARCHIVOS 10
 
 typedef struct {
-  char cadena[max_tamano_cadena];
+  char cadena[MAX_TAMANO_CADENA];
   int tiempo_ejecucion;
-  char fecha_ejecucion[tamano_fila_fecha_hora];
-  char hora_ejecucion[tamano_fila_fecha_hora];
+  char fecha_ejecucion[TAMANO_FILA_FECHA_HORA];
+  char hora_ejecucion[TAMANO_FILA_FECHA_HORA];
 } registro ;
 
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo);

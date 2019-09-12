@@ -6,13 +6,13 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo], int numero_archivos_input, bool bandera_orden_reverso){
+void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int numero_archivos_input, bool bandera_orden_reverso){
 
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
     /*int numero_lineas_archivo;*/
     registro* array_registros = NULL;
-    int lineas_por_archivo[maximo_numero_archivos];
+    int lineas_por_archivo[MAXIMO_NUMERO_ARCHIVOS];
 
     for(i=0; i<numero_archivos_input; i++){
         lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
@@ -70,12 +70,12 @@ void RepartirArchivosProcesos(char array_archivos_input[][maximo_nombre_archivo]
 
 }
 
-int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]){
+int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
 
     int total_lineas = 0;
     int numero_lineas_archivo;
     int i;
-    char archivo_nombre[maximo_nombre_archivo];
+    char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
 
     for (i = 0; i < numero_archivos_input; i++) {
         strcpy(archivo_nombre, array_archivos_input[i]);
@@ -92,13 +92,13 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
     return total_lineas;
 }
 
-registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo], int total_lineas){
+registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
 
     int i, j, k = 0;
     int numero_lineas_archivo;
     registro* array_registros = NULL;
     registro* array_temporales = (registro*)malloc(total_lineas*sizeof(registro));
-    char archivo_nombre[maximo_nombre_archivo];
+    char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
 
     if (array_temporales == NULL) {
         printf("Memory not allocated.\n");
@@ -134,10 +134,10 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     return array_temporales;
 }
 
-void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][maximo_nombre_archivo]){
+void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
     int status;
     int i;
-    char archivo_nombre[maximo_nombre_archivo];
+    char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
 
     for (i=0; i<numero_archivos_input; i++){
         strcpy(archivo_nombre, array_archivos_input[i]);
@@ -150,7 +150,7 @@ void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][max
 
 }
 
-void ImprimirResultado(registro* array_temporales, char archivo_output[maximo_nombre_archivo], int total_lineas){
+void ImprimirResultado(registro* array_temporales, char archivo_output[MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
 
     ImprimirArchivo(array_temporales, total_lineas, archivo_output, false);
 
@@ -162,8 +162,8 @@ int main (int argc, char **argv) {
     int i;
     int resultado_comparacion_strings;
     bool bandera_orden_reverso = false;
-    char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
-    char archivo_output[maximo_nombre_archivo];
+    char array_archivos_input[MAXIMO_NUMERO_ARCHIVOS][MAXIMO_NOMBRE_ARCHIVO];
+    char archivo_output[MAXIMO_NOMBRE_ARCHIVO];
     registro* array_temporales = NULL;
 
     /*Si hay 13 argumentos significa que se pasaron: default, flag, 10 archivos de input y 1 de output*/

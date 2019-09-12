@@ -6,15 +6,15 @@
 
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
-    FILE * archivo;
-    char linea[max_tamano_cadena];
-    char linea_aux[max_tamano_cadena];
-    char delim[] = " ";
+    FILE *archivo;
+    char linea[MAX_TAMANO_CADENA];
+    char linea_aux[MAX_TAMANO_CADENA];
+    char delimitador[] = " ";
     int contador = 0;
     int numero_linea = 0;
     int i = 0;
     char *item;
-    char *ptr;
+    char *caracter_aux;
     registro* array_registros = (registro*)malloc(numero_lineas_archivo*sizeof(registro));
 
     if (array_registros == NULL) {
@@ -45,10 +45,10 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
         strcpy(linea_aux, array_registros[i].cadena);
 
-        if( (ptr = strchr(linea_aux, '\n')) != NULL)
-          *ptr = '\0';
+        if( (caracter_aux = strchr(linea_aux, '\n')) != NULL)
+          *caracter_aux = '\0';
 
-        item = strtok(linea_aux, delim);
+        item = strtok(linea_aux, delimitador);
         contador = 1;
         while(item != NULL){
             /*printf("Contador: %d\n",contador);
@@ -68,7 +68,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
             }
 
             contador = contador+1;
-            item = strtok(NULL, delim);
+            item = strtok(NULL, delimitador);
         }
 
     }
@@ -78,48 +78,40 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 }
 
 int ContarLineasArchivo(char nombre_archivo[]){
-    FILE *fp;
-    int count = 0;  /* Line counter (result) */
+    FILE *archivo;
+    int contador_lineas = 0;  /* Line counter (result) */
     /*char nombre_archivo[MAX_FILE_NAME];*/
-    char c;  /* To store a character read from file*/
+    char caracter;  /* To store a character read from file*/
 
     /* Open the file */
-    fp = fopen(nombre_archivo, "r");
+    archivo = fopen(nombre_archivo, "r");
 
     /* Check if file exists */
-    if (fp == NULL){
+    if (archivo == NULL){
         perror ( nombre_archivo ); /* why didn't the file open? */
         /*exit(1);*/
         return 0;
     }
 
     /* Extract characters from file and store in character c */
-    for (c = getc(fp); c != EOF; c = getc(fp))
-        if (c == '\n') /* Increment count if this character is newline */
-            count = count + 1;
+    for (caracter = getc(archivo); caracter != EOF; caracter = getc(archivo))
+        if (caracter == '\n') /* Increment count if this character is newline */
+            contador_lineas = contador_lineas + 1;
 
     /* Close the file */
-    fclose(fp);
+    fclose(archivo);
     /*printf("The file %s has %d lines\n ", nombre_archivo, count);*/
 
-    return count;
+    return contador_lineas;
 }
 
 void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
     int i = 0, j = 0;
     int resultado_comparacion_strings;
-    char fecha_hora_1[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
-    char fecha_hora_2[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
+    char fecha_hora_1[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
+    char fecha_hora_2[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
     registro registro_auxiliar;
-
-    /*for (i = 0; i < numero_elementos; i++){
-      printf("Contador:%d\n",i);
-      printf("%s",array_registros[i].cadena);
-      printf("%d ",array_registros[i].tiempo_ejecucion);
-      printf("%s ",array_registros[i].fecha_ejecucion);
-      printf("%s\n",array_registros[i].hora_ejecucion);
-    }*/
 
     for (i = 0; i < numero_elementos; i++){
 
@@ -265,7 +257,6 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
 
         }
 
-
       }
     }
 
@@ -302,8 +293,8 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
     int n2 =  r - m;
 
     int resultado_comparacion_strings;
-    char fecha_hora_1[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
-    char fecha_hora_2[tamano_fila_fecha_hora+tamano_fila_fecha_hora+1];
+    char fecha_hora_1[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
+    char fecha_hora_2[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
 
     /* create temp arrays */
     /*int L[n1], R[n2];*/
@@ -511,36 +502,27 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
 void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool temporal){
 
      int i = 0;
-     FILE *fptr;
+     FILE *archivo;
 
-     char archivo_nombre[maximo_nombre_archivo];
+     char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
      strcpy(archivo_nombre, nombre_archivo);
 
      if (temporal == true){
-          strcat(archivo_nombre,"_temporal");
+        strcat(archivo_nombre,"_temporal");
      }
 
-     fptr = fopen(archivo_nombre, "w");
+     archivo = fopen(archivo_nombre, "w");
 
-     if(fptr == NULL){
+     if(archivo == NULL){
         perror( archivo_nombre );
         free(array_registros);
         exit(1);
      }
 
-     /*if( bandera_orden_reverso == false ){  /*De menor a mayor*/
+     for (i = 0; i < numero_elementos; i++){
+        fprintf(archivo,"%s", array_registros[i].cadena);
+     }
 
-         for (i = 0; i < numero_elementos; i++){
-              fprintf(fptr,"%s", array_registros[i].cadena);
-         }
-
-     /*}else{ /*De mayor a menor
-
-         for (i = numero_elementos; i > -1; i--){
-              fprintf(fptr,"%s", array_registros[i].cadena);
-         }
-     /*}*/
-
-     fclose(fptr);
+     fclose(archivo);
 
 }

@@ -41,7 +41,7 @@ void RepartirArchivosHilos(int numero_archivos_input){
     int tarea_ids[numero_archivos_input];
     int rc, i;
 
-    for(i=0; i<maximo_numero_archivos; i++){
+    for(i=0; i<MAXIMO_NUMERO_ARCHIVOS; i++){
         array_temporales[i] = NULL;
     }
 
@@ -112,7 +112,7 @@ registro* UnirRegistros(int numero_archivos_input){
 
 }
 
-void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo]){
+void ImprimirResultado(registro* array_general, char archivo_output[MAXIMO_NOMBRE_ARCHIVO]){
     ImprimirArchivo(array_general, total_lineas, archivo_output, false);
 }
 
@@ -123,7 +123,7 @@ int main (int argc, char **argv) {
     int resultado_comparacion_strings;
     bandera_orden_reverso = false;
 
-    char archivo_output[maximo_nombre_archivo];
+    char archivo_output[MAXIMO_NOMBRE_ARCHIVO];
     registro* array_temporales = NULL;
     registro* array_general = NULL;
 
