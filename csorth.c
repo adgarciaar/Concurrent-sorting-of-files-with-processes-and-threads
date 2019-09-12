@@ -1,98 +1,12 @@
-#include "procesamientoArchivo.h"
+#include "csorth.h"
 #include <string.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <pthread.h>
-
 #include <limits.h>
-
-void *ProcesarArchivo(void *thread_id);
-void RepartirArchivosHilos(int numero_archivos_input);
-registro* UnirRegistros(int numero_archivos_input);
-void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo]);
-void ContarTotalLineas(int numero_archivos_input);
-
-registro* array_temporales[maximo_numero_archivos];
-char array_archivos_input[maximo_numero_archivos][maximo_nombre_archivo];
-int total_lineas;
-int lineas_por_archivo[maximo_numero_archivos];
-bool bandera_orden_reverso;
-
-pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
-
-int main (int argc, char **argv) {
-
-    int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
-    int i;
-    int resultado_comparacion_strings;
-    bandera_orden_reverso = false;
-
-    char archivo_output[maximo_nombre_archivo];
-    registro* array_temporales = NULL;
-    registro* array_general = NULL;
-
-    /*Si hay 13 argumentos significa que se pasaron: default, flag, 10 archivos de input y 1 de output*/
-    /*Debe haber mínimo 3 argumentos: default, input file & output file*/
-    if(argc>13 || argc<3){
-        /*No pueden haber más de 13 argumentos (máximo)*/
-        /*No puede haber menos de 3 argumentos (3 mínimo)*/
-        printf("Error con numero de argumentos\n");
-        exit(1);
-    }
-
-    /*
-    for (i = 0; i < argc; i++){
-        printf("%s\n", argv[i]);
-    }*/
-    resultado_comparacion_strings = strcmp("-r", argv[1]);
-    if( resultado_comparacion_strings == 0 ){
-        bandera_orden_reverso = true;
-    }
-    if (bandera_orden_reverso == true && argc == 3){
-        /*Si se ingresó flag -r pero sólo hay 3 argumentos significa que falta el archivo output*/
-        printf("Error con numero de argumentos\n");
-        exit(1);
-    }
-    if (bandera_orden_reverso == false && argc == 13){
-        /*Si no se ingresó flag -r y hay 13 argumentos significa que se introdujo un archivo de más*/
-        printf("Error con numero de argumentos\n");
-        exit(1);
-    }
-
-    for (i = 1; i < argc-1; i++){
-        resultado_comparacion_strings = strcmp("-r", argv[i]);
-        if( resultado_comparacion_strings != 0 ){
-            /*si argv[i] es diferente de -r entonces es archivo de entrada*/
-            strcpy(array_archivos_input[numero_archivos_input], argv[i]);
-            /*printf("%s\n", array_archivos_input[i]);*/
-            /*printf("%s\n", array_archivos_input[numero_archivos_input]);*/
-            numero_archivos_input = numero_archivos_input+1;
-        }
-    }
-
-    /*for (i = 0; i < numero_archivos_input; i++){
-        printf("%s\n", array_archivos_input[i]);
-    }*/
-
-    strcpy(archivo_output, argv[argc-1]);
-
-    total_lineas = 0;
-
-    RepartirArchivosHilos(numero_archivos_input);
-    ContarTotalLineas(numero_archivos_input);
-    array_general = UnirRegistros(numero_archivos_input);
-    OrdenarRegistroPorMergeSort(array_general, total_lineas, bandera_orden_reverso);
-    ImprimirResultado(array_general, archivo_output);
-
-    free(array_general);
-    array_general = NULL;
-
-    return(0);
-}
 
 void *ProcesarArchivo(void *thread_id){
 
@@ -200,4 +114,74 @@ registro* UnirRegistros(int numero_archivos_input){
 
 void ImprimirResultado(registro* array_general, char archivo_output[maximo_nombre_archivo]){
     ImprimirArchivo(array_general, total_lineas, archivo_output, false);
+}
+
+int main (int argc, char **argv) {
+
+    int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
+    int i;
+    int resultado_comparacion_strings;
+    bandera_orden_reverso = false;
+
+    char archivo_output[maximo_nombre_archivo];
+    registro* array_temporales = NULL;
+    registro* array_general = NULL;
+
+    /*Si hay 13 argumentos significa que se pasaron: default, flag, 10 archivos de input y 1 de output*/
+    /*Debe haber mínimo 3 argumentos: default, input file & output file*/
+    if(argc>13 || argc<3){
+        /*No pueden haber más de 13 argumentos (máximo)*/
+        /*No puede haber menos de 3 argumentos (3 mínimo)*/
+        printf("Error con numero de argumentos\n");
+        exit(1);
+    }
+
+    /*
+    for (i = 0; i < argc; i++){
+        printf("%s\n", argv[i]);
+    }*/
+    resultado_comparacion_strings = strcmp("-r", argv[1]);
+    if( resultado_comparacion_strings == 0 ){
+        bandera_orden_reverso = true;
+    }
+    if (bandera_orden_reverso == true && argc == 3){
+        /*Si se ingresó flag -r pero sólo hay 3 argumentos significa que falta el archivo output*/
+        printf("Error con numero de argumentos\n");
+        exit(1);
+    }
+    if (bandera_orden_reverso == false && argc == 13){
+        /*Si no se ingresó flag -r y hay 13 argumentos significa que se introdujo un archivo de más*/
+        printf("Error con numero de argumentos\n");
+        exit(1);
+    }
+
+    for (i = 1; i < argc-1; i++){
+        resultado_comparacion_strings = strcmp("-r", argv[i]);
+        if( resultado_comparacion_strings != 0 ){
+            /*si argv[i] es diferente de -r entonces es archivo de entrada*/
+            strcpy(array_archivos_input[numero_archivos_input], argv[i]);
+            /*printf("%s\n", array_archivos_input[i]);*/
+            /*printf("%s\n", array_archivos_input[numero_archivos_input]);*/
+            numero_archivos_input = numero_archivos_input+1;
+        }
+    }
+
+    /*for (i = 0; i < numero_archivos_input; i++){
+        printf("%s\n", array_archivos_input[i]);
+    }*/
+
+    strcpy(archivo_output, argv[argc-1]);
+
+    total_lineas = 0;
+
+    RepartirArchivosHilos(numero_archivos_input);
+    ContarTotalLineas(numero_archivos_input);
+    array_general = UnirRegistros(numero_archivos_input);
+    OrdenarRegistroPorMergeSort(array_general, total_lineas, bandera_orden_reverso);
+    ImprimirResultado(array_general, archivo_output);
+
+    free(array_general);
+    array_general = NULL;
+
+    return(0);
 }
