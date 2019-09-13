@@ -1,0 +1,93 @@
+/usr/bin/time ./csortp archivos/log1000A archivos/log1000B archivos/log1000C archivos/resultado
+Inicia proceso hijo con pid 8897
+Inicia proceso hijo con pid 8898
+Inicia proceso hijo con pid 8899
+Termina proceso hijo con pid 8898
+Termina proceso hijo con pid 8897
+Termina proceso hijo con pid 8899
+Todos los procesos hijos han finalizado
+0.13user 0.00system 0:00.05elapsed 268%CPU (0avgtext+0avgdata 3100maxresident)k
+0inputs+576outputs (0major+857minor)pagefaults 0swaps
+
+/usr/bin/time ./csorth archivos/log1000A archivos/log1000B archivos/log1000C archivos/resultado
+Inicia hilo 1
+Inicia hilo 2
+Inicia hilo 3
+Termina hilo 2
+Termina hilo 1
+Termina hilo 3
+Todos los hilos han finalizado
+0.13user 0.00system 0:00.05elapsed 257%CPU (0avgtext+0avgdata 3568maxresident)k
+0inputs+288outputs (0major+709minor)pagefaults 0swaps
+
+/usr/bin/time ./csortpexec archivos/log1000A archivos/log1000B archivos/log1000C archivos/resultado
+Inicia proceso hijo con pid 8917
+Inicia proceso hijo con pid 8918
+Inicia proceso hijo con pid 8919
+Todos los procesos hijos han finalizado
+0.02user 0.00system 0:00.01elapsed 200%CPU (0avgtext+0avgdata 3396maxresident)k
+0inputs+576outputs (0major+1499minor)pagefaults 0swaps
+
+#################################
+
+/usr/bin/time ./csortp archivos/log10Kfixed archivos/log10KAfixed archivos/log10KBfixed archivos/resultado
+Inicia proceso hijo con pid 8933
+Inicia proceso hijo con pid 8934
+Inicia proceso hijo con pid 8935
+Termina proceso hijo con pid 8933
+Termina proceso hijo con pid 8934
+Termina proceso hijo con pid 8935
+Todos los procesos hijos han finalizado
+10.51user 0.01system 0:04.05elapsed 259%CPU (0avgtext+0avgdata 17724maxresident)k
+0inputs+5752outputs (0major+7017minor)pagefaults 0swaps
+
+/usr/bin/time ./csorth archivos/log10Kfixed archivos/log10KAfixed archivos/log10KBfixed archivos/resultado
+Inicia hilo 1
+Inicia hilo 2
+Inicia hilo 3
+Termina hilo 2
+Termina hilo 1
+Termina hilo 3
+Todos los hilos han finalizado
+10.29user 0.00system 0:03.98elapsed 258%CPU (0avgtext+0avgdata 18372maxresident)k
+0inputs+2872outputs (0major+6245minor)pagefaults 0swaps
+
+/usr/bin/time ./csortpexec archivos/log10Kfixed archivos/log10KAfixed archivos/log10KBfixed archivos/resultado
+Inicia proceso hijo con pid 8952
+Inicia proceso hijo con pid 8953
+Inicia proceso hijo con pid 8954
+Todos los procesos hijos han finalizado
+0.10user 0.02system 0:00.09elapsed 151%CPU (0avgtext+0avgdata 17628maxresident)k
+0inputs+5752outputs (0major+6448minor)pagefaults 0swaps
+
+###############################################################
+
+/usr/bin/time ./csortp archivos/log20K archivos/log20KA archivos/log20KB archivos/resultado
+Inicia proceso hijo con pid 8963
+Inicia proceso hijo con pid 8964
+Inicia proceso hijo con pid 8965
+Termina proceso hijo con pid 8963
+Termina proceso hijo con pid 8965
+Termina proceso hijo con pid 8964
+Todos los procesos hijos han finalizado
+38.39user 0.01system 0:13.40elapsed 286%CPU (0avgtext+0avgdata 34136maxresident)k
+0inputs+11504outputs (0major+13849minor)pagefaults 0swaps
+
+/usr/bin/time ./csorth archivos/log20K archivos/log20KA archivos/log20KB archivos/resultado
+Inicia hilo 1
+Inicia hilo 3
+Inicia hilo 2
+Termina hilo 1
+Termina hilo 3
+Termina hilo 2
+Todos los hilos han finalizado
+39.12user 0.02system 0:13.62elapsed 287%CPU (0avgtext+0avgdata 34640maxresident)k
+0inputs+5744outputs (0major+12399minor)pagefaults 0swaps
+
+/usr/bin/time ./csortpexec archivos/log20K archivos/log20KA archivos/log20KB archivos/resultado
+Inicia proceso hijo con pid 8985
+Inicia proceso hijo con pid 8986
+Inicia proceso hijo con pid 8987
+Todos los procesos hijos han finalizado
+0.24user 0.02system 0:00.17elapsed 155%CPU (0avgtext+0avgdata 34056maxresident)k
+0inputs+11504outputs (0major+11937minor)pagefaults 0swaps
