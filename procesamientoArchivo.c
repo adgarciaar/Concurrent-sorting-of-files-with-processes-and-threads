@@ -32,6 +32,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     char *item;
     char *caracter_aux;
     registro* array_registros = (registro*)malloc(numero_lineas_archivo*sizeof(registro));
+    char* auxiliar_para_strtok_r;
 
     if (array_registros == NULL) {
         printf("Memoria no alocada para las filas del log.\n");
@@ -63,7 +64,9 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
             *caracter_aux = '\0';
         }/*end if*/
 
-        item = strtok(linea_aux, delimitador);
+        auxiliar_para_strtok_r = linea_aux, array_registros[i].cadena;
+
+        item = strtok_r(linea_aux, delimitador, &auxiliar_para_strtok_r);
         contador = 1;
         while(item != NULL){
             if (contador == 4){
@@ -77,7 +80,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
                 item = NULL;
             }/*end if*/
             contador = contador+1;
-            item = strtok(NULL, delimitador);
+            item = strtok_r(NULL, delimitador, &auxiliar_para_strtok_r);
         }/*end while*/
 
     }/*end for*/

@@ -33,6 +33,9 @@ void *ProcesarArchivo(void *thread_id){
     tarea_id = *id_ptr;
     printf("Inicia hilo %d\n", tarea_id+1);
 
+    lineas_por_archivo[ tarea_id ] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
+    array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[ tarea_id ] );
+
     OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], bandera_orden_reverso);
 
     printf("Termina hilo %d\n", tarea_id+1);
@@ -56,14 +59,6 @@ void RepartirArchivosHilos(int numero_archivos_input){
 
     for(i=0; i<MAXIMO_NUMERO_ARCHIVOS; i++){
         array_temporales[i] = NULL;
-    }/*end for*/
-
-    for(i=0; i<numero_archivos_input; i++){
-        lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
-        if (lineas_por_archivo[i] == 0){
-            exit(1);
-        }/*end if*/
-        array_temporales[ i ] = LeerArchivo( array_archivos_input[ i ], lineas_por_archivo[i] );
     }/*end for*/
 
     for(i=0; i<numero_archivos_input; i++){
