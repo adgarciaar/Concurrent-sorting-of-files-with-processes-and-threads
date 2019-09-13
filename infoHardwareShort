@@ -1,0 +1,35 @@
+ruta H/W       Dispositivo  Clase          Descripción
+=======================================================
+                            system         10J0S31400 (LENOVO_MT_10J0_BU_LENOVO_FM_ThinkCentre M700)
+/0                          bus            30D2
+/0/0                        memory         64KiB BIOS
+/0/47                       memory         128KiB L1 caché
+/0/48                       memory         128KiB L1 caché
+/0/49                       memory         1MiB L2 caché
+/0/4a                       memory         8MiB L3 caché
+/0/4b                       processor      Intel(R) Core(TM) i7-6700T CPU @ 2.80GHz
+/0/4c                       memory         8GiB Memoria de sistema
+/0/4c/0                     memory         Project-Id-Version: lshwReport-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>PO-Revision-Date: 2012-03-14 06:38+0000Last-Translator: Paco Molinero <paco@byasl.com>Language-Team: Spanish <es@li.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-Encoding: 8bitX-Launchpad-Export-Date: 2018-07-12 13:19+0000X-Generator: Launchpad (build 18719)Project-Id-Version: lshwReport-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>PO-Revision-Date: 2012-03-14 06:38+0000Last-Translator: Paco Molinero <paco@byasl.com>Language-Team: Spanish <es@li.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-Encoding: 8bitX-Launchpad-Export-Date: 2018-07-12 13:19+0000X-Generator: Launchpad (build 18719) [vacío]
+/0/4c/1                     memory         8GiB SODIMM DDR4 Síncrono 2133 MHz (0,5 ns)
+/0/100                      bridge         Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers
+/0/100/2                    display        HD Graphics 530
+/0/100/14                   bus            100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller
+/0/100/14/0    usb1         bus            xHCI Host Controller
+/0/100/14/0/3               input          USB NETVISTA FULL WIDTH KEYBOARD
+/0/100/14/0/6               input          Lenovo USB Optical Mouse
+/0/100/14/1    usb2         bus            xHCI Host Controller
+/0/100/16                   communication  100 Series/C230 Series Chipset Family MEI Controller #1
+/0/100/17                   storage        Q170/Q150/B150/H170/H110/Z170/CM236 Chipset SATA Controller [AHCI Mode]
+/0/100/1f                   bridge         B150 Chipset LPC/eSPI Controller
+/0/100/1f.2                 memory         Memory controller
+/0/100/1f.3                 multimedia     100 Series/C230 Series Chipset Family HD Audio Controller
+/0/100/1f.4                 bus            100 Series/C230 Series Chipset Family SMBus
+/0/100/1f.6    eno1         network        Ethernet Connection (2) I219-V
+/0/1           scsi0        storage        
+/0/1/0.0.0     /dev/sda     disk           500GB ST500LM021-1KJ15
+/0/1/0.0.0/1   /dev/sda1    volume         498MiB Windows NTFS volumen
+/0/1/0.0.0/2   /dev/sda2    volume         99MiB Windows FAT volumen
+/0/1/0.0.0/3   /dev/sda3    volume         15MiB reserved partition
+/0/1/0.0.0/4   /dev/sda4    volume         367GiB Windows NTFS volumen
+/0/1/0.0.0/5   /dev/sda5    volume         97GiB partición EXT4
+/1                          power          To Be Filled By O.E.M.
