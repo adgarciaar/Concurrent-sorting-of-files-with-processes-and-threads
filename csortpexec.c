@@ -44,14 +44,6 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
 
     strcat(comando, " -b -V -k4 -k5.1,5.8 -k6.1,6.8 ");
 
-    /*Validar que los archivos existan*/
-    for(i=0; i<numero_archivos_input; i++){
-        numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ i ] );
-        if (numero_lineas_archivo == 0){
-            exit(1);
-        }/*end if*/
-    }/*end for*/
-
     for (i = 0; i < nprocesos; ++i) {
           if ((childpid = fork()) < 0) {
                 perror("fork:");
@@ -253,6 +245,14 @@ int main (int argc, char **argv) {
     }/*end for*/
 
     strcpy(archivo_output, argv[argc-1]);
+
+    bool auxiliar;
+    for (i = 0; i < numero_archivos_input; i++){
+        auxiliar = AbrirArchivo(array_archivos_input[ i ]);
+        if( auxiliar == false ){
+            exit(1);
+        }
+    }
 
     RepartirArchivosProcesos(array_archivos_input, numero_archivos_input, bandera_orden_reverso);
 

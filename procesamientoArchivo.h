@@ -33,3 +33,4 @@ void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombr
 void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso);
 void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1, int posicion2);
 void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso);
+bool AbrirArchivo(char nombre_archivo[]);

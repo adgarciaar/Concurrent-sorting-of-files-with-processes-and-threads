@@ -28,15 +28,9 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
     registro* array_registros = NULL;
     int lineas_por_archivo[MAXIMO_NUMERO_ARCHIVOS];
 
-    for(i=0; i<numero_archivos_input; i++){
-        lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
-        if (lineas_por_archivo[i] == 0){
-            exit(1);
-        }/*end if*/
-    }/*end for*/
-
     if(nprocesos == 1){
 
+        lineas_por_archivo[0] = ContarLineasArchivo( array_archivos_input[ 0 ] );
         array_registros = LeerArchivo( array_archivos_input[0], lineas_por_archivo[0]);
         OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[0], bandera_orden_reverso);
         ImprimirArchivo(array_registros, lineas_por_archivo[0], array_archivos_input[0], true);
@@ -54,6 +48,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
                 if (childpid == 0) {
                     printf("Inicia proceso hijo con pid %d\n", getpid());
 
+                    lineas_por_archivo[i] = ContarLineasArchivo( array_archivos_input[ i ] );
                     array_registros = LeerArchivo( array_archivos_input[i], lineas_por_archivo[i]);
                     OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[i], bandera_orden_reverso);
                     ImprimirArchivo(array_registros, lineas_por_archivo[i], array_archivos_input[i], true);
@@ -228,9 +223,17 @@ int main (int argc, char **argv) {
             strcpy(array_archivos_input[numero_archivos_input], argv[i]);
             numero_archivos_input = numero_archivos_input+1;
         }/*end if*/
-    }/*end for*/  
+    }/*end for*/
 
     strcpy(archivo_output, argv[argc-1]);
+
+    bool auxiliar;
+    for (i = 0; i < numero_archivos_input; i++){
+        auxiliar = AbrirArchivo(array_archivos_input[ i ]);
+        if( auxiliar == false ){
+            exit(1);
+        }
+    }
 
     RepartirArchivosProcesos(array_archivos_input, numero_archivos_input, bandera_orden_reverso);
 

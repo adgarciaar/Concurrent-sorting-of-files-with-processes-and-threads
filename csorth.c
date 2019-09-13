@@ -200,6 +200,14 @@ int main (int argc, char **argv) {
 
     strcpy(archivo_output, argv[argc-1]);
 
+    bool auxiliar;
+    for (i = 0; i < numero_archivos_input; i++){
+        auxiliar = AbrirArchivo(array_archivos_input[ i ]);
+        if( auxiliar == false ){
+            exit(1);
+        }
+    }
+
     total_lineas = 0;
 
     RepartirArchivosHilos(numero_archivos_input);

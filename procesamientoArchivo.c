@@ -13,6 +13,18 @@ Fecha de última modificación: 12/09/19
 #include <string.h>
 #include <stdbool.h>
 
+bool AbrirArchivo(char nombre_archivo[]){
+    FILE *archivo;
+    archivo = fopen( nombre_archivo ,"r");
+    if ( archivo != NULL ){
+        fclose(archivo);
+        return true;
+    }else{
+        perror ( nombre_archivo );
+        return false;
+    }
+}
+
 /*
 Función:
 Autores de la función:
