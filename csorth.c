@@ -28,23 +28,12 @@ void *ProcesarArchivo(void *thread_id){
 
     int *id_ptr;
     int tarea_id;
-    /*int numero_lineas_archivo;*/
 
     id_ptr = (int *) thread_id;
     tarea_id = *id_ptr;
     printf("Inicia hilo %d\n", tarea_id+1);
 
-    /*lineas_por_archivo[tarea_id] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );*/
-
-    /*pthread_mutex_lock( &mutex1 );
-    array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[tarea_id] );
-    pthread_mutex_unlock( &mutex1 );*/
-
     OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], bandera_orden_reverso);
-
-    /*QUITAR ESTO AHORITA*/
-
-    /*ImprimirArchivo(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], array_archivos_input[ tarea_id ], false, true);*/
 
     printf("Termina hilo %d\n", tarea_id+1);
 
@@ -90,7 +79,7 @@ void RepartirArchivosHilos(int numero_archivos_input){
         pthread_join(threads[i], NULL);
     }/*end if*/
     printf("Todos los hilos han finalizado\n");
-    /*pthread_exit(NULL);*/
+
 }
 
 /*
@@ -172,7 +161,7 @@ Descripción:
 */
 int main (int argc, char **argv) {
 
-    int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
+    int numero_archivos_input = 0;
     int i;
     int resultado_comparacion_strings;
     bandera_orden_reverso = false;
@@ -190,10 +179,6 @@ int main (int argc, char **argv) {
         exit(1);
     }/*end if*/
 
-    /*
-    for (i = 0; i < argc; i++){
-        printf("%s\n", argv[i]);
-    }*/
     resultado_comparacion_strings = strcmp("-r", argv[1]);
     if( resultado_comparacion_strings == 0 ){
         bandera_orden_reverso = true;
@@ -214,15 +199,9 @@ int main (int argc, char **argv) {
         if( resultado_comparacion_strings != 0 ){
             /*si argv[i] es diferente de -r entonces es archivo de entrada*/
             strcpy(array_archivos_input[numero_archivos_input], argv[i]);
-            /*printf("%s\n", array_archivos_input[i]);*/
-            /*printf("%s\n", array_archivos_input[numero_archivos_input]);*/
             numero_archivos_input = numero_archivos_input+1;
         }/*end if*/
     }/*end for*/
-
-    /*for (i = 0; i < numero_archivos_input; i++){
-        printf("%s\n", array_archivos_input[i]);
-    }*/
 
     strcpy(archivo_output, argv[argc-1]);
 

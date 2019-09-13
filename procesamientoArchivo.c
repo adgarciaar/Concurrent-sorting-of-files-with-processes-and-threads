@@ -41,18 +41,16 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     archivo = fopen( nombre_archivo ,"r");
 
     if ( archivo != NULL ){
-      /* Leer cada línea del archivo y almacenarla en array de registro */
 
       while (fgets(linea,sizeof(linea),archivo)) {
           strcpy(array_registros[numero_linea].cadena, linea);
-          /*printf("%s",array_registros[numero_linea].cadena);*/
           numero_linea = numero_linea + 1;
       }/*end while*/
-      fclose(archivo);/* Close file */
+      fclose(archivo);
 
     }else{
        free(array_registros);
-       perror ( nombre_archivo ); /* why didn't the file open? */
+       perror ( nombre_archivo );
        exit(1);
     }/*end if*/
 
@@ -68,22 +66,16 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
         item = strtok(linea_aux, delimitador);
         contador = 1;
         while(item != NULL){
-            /*printf("Contador: %d\n",contador);
-            printf("%s\n",item);*/
             if (contador == 4){
                 array_registros[i].tiempo_ejecucion = atoi(item);
-                /*printf("%d\n",array_registros[i].tiempo_ejecucion);*/
             }/*end if*/
             if (contador == 5){
                 strcpy(array_registros[i].fecha_ejecucion,item);
-                /*printf("%s\n",array_registros[i].fecha_ejecucion);*/
             }/*end if*/
             if (contador == 6){
                 strcpy(array_registros[i].hora_ejecucion,item);
-                /*printf("%s\n",array_registros[i].hora_ejecucion);*/
                 item = NULL;
             }/*end if*/
-
             contador = contador+1;
             item = strtok(NULL, delimitador);
         }/*end while*/
@@ -103,30 +95,24 @@ Descripción:
 */
 int ContarLineasArchivo(char nombre_archivo[]){
     FILE *archivo;
-    int contador_lineas = 0;  /* Line counter (result) */
-    /*char nombre_archivo[MAX_FILE_NAME];*/
-    char caracter;  /* To store a character read from file*/
+    int contador_lineas = 0;
+    char caracter;
 
-    /* Open the file */
     archivo = fopen(nombre_archivo, "r");
 
-    /* Check if file exists */
     if (archivo == NULL){
-        perror ( nombre_archivo ); /* why didn't the file open? */
-        /*exit(1);*/
+        perror ( nombre_archivo );
         return 0;
     }/*end if*/
 
     /* Extract characters from file and store in character c */
     for (caracter = getc(archivo); caracter != EOF; caracter = getc(archivo)){
-        if (caracter == '\n'){ /* Increment count if this character is newline */
+        if (caracter == '\n'){
             contador_lineas = contador_lineas + 1;
         }/*end if*/
     }/*end for*/
 
-    /* Close the file */
     fclose(archivo);
-    /*printf("The file %s has %d lines\n ", nombre_archivo, count);*/
 
     return contador_lineas;
 }
@@ -142,13 +128,13 @@ void IntercambiarElementosArreglo(registro* array_registros, int j){
 
     registro registro_auxiliar;
 
-    /*Salvar los datos del que tiene menor tiempo de ejecución*/
+    /*Salvar los datos del primero*/
     strcpy(registro_auxiliar.cadena, array_registros[j+1].cadena);
     registro_auxiliar.tiempo_ejecucion = array_registros[j+1].tiempo_ejecucion;
     strcpy(registro_auxiliar.fecha_ejecucion, array_registros[j+1].fecha_ejecucion);
     strcpy(registro_auxiliar.hora_ejecucion, array_registros[j+1].hora_ejecucion);
 
-    /*Cambiar elemento con menor tiempo por el otro*/
+    /*Intercambiar un elemento*/
     strcpy(array_registros[j+1].cadena, array_registros[j].cadena);
     array_registros[j+1].tiempo_ejecucion = array_registros[j].tiempo_ejecucion;
     strcpy(array_registros[j+1].fecha_ejecucion, array_registros[j].fecha_ejecucion);
@@ -183,7 +169,6 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
         if (bandera_orden_reverso == false){ /*Se va a ordenar de menor a mayor*/
 
             if(array_registros[j].tiempo_ejecucion > array_registros[j+1].tiempo_ejecucion){
-
                 /*Hay que intercabiar los elementos para que quede primero el menor*/
                 IntercambiarElementosArreglo(array_registros, j);
 
@@ -253,9 +238,7 @@ Retorno:
 Descripción:
 */
 void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
-
     mergeSort(array_registros, 0, numero_elementos - 1, bandera_orden_reverso);
-
 }
 
 /*
@@ -269,8 +252,8 @@ Descripción:
    sub-array of arr to be sorted */
 void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso){
     if (l < r){
-        /* Same as (l+r)/2, but avoids overflow for large l and h */
-        int m = l+(r-l)/2;
+        int m;
+        m = l+(r-l)/2;/* Same as (l+r)/2, but avoids overflow for large l and h */
 
         /* Sort first and second halves*/
         mergeSort(array_registros, l, m, bandera_orden_reverso);
@@ -288,12 +271,10 @@ Retorno:
 Descripción:
 */
 void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1, int posicion2){
-
       strcpy(arreglo1[posicion1].cadena, arreglo2[posicion2].cadena);
       arreglo1[posicion1].tiempo_ejecucion = arreglo2[posicion2].tiempo_ejecucion;
       strcpy(arreglo1[posicion1].fecha_ejecucion, arreglo2[posicion2].fecha_ejecucion);
       strcpy(arreglo1[posicion1].hora_ejecucion, arreglo2[posicion2].hora_ejecucion);
-
 }
 
 /*
@@ -301,11 +282,9 @@ Función:
 Autores de la función:
 Parámetros de entrada:
 Retorno:
-Descripción:
+Descripción: Merges two subarrays of arr[]. First subarray is arr[l..m].
+Second subarray is arr[m+1..r]
 */
-/* Merges two subarrays of arr[].
-// First subarray is arr[l..m]
-// Second subarray is arr[m+1..r] */
 void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso){
 
     int i, j, k;
@@ -374,7 +353,7 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
                     resultado_comparacion_strings = strcmp(fecha_hora_1, fecha_hora_2);
 
                     if( resultado_comparacion_strings < 0 ){
-                      /*Si el elemento siguiente es mayor en fecha u hora*/
+                      /*Si el elemento siguiente es menor en fecha u hora*/
                         /* arr[k] = L[i]; */
                         CopiarElementoArreglo(array_registros, array_L, k, i);
                         i++;
@@ -424,16 +403,14 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
         }/*end if*/
         k++;
     }/*end while*/
-    /* Copy the remaining elements of L[], if there
-       are any */
+    /* Copy the remaining elements of L[], if there are any */
     while (i < n1){
         /* arr[k] = L[i]; */
         CopiarElementoArreglo(array_registros, array_L, k, i);
         i++;
         k++;
     }/*end while*/
-    /* Copy the remaining elements of R[], if there
-       are any */
+    /* Copy the remaining elements of R[], if there are any */
     while (j < n2){
         /* arr[k] = R[j]; */
         CopiarElementoArreglo(array_registros, array_R, k, j);

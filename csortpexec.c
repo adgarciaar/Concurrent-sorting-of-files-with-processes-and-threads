@@ -44,10 +44,6 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
 
     strcat(comando, " -b -V -k4 -k5.1,5.8 -k6.1,6.8 ");
 
-    /*int numero_lineas_archivo;*/
-    /*registro* array_registros = NULL;*/
-    /*int lineas_por_archivo[MAXIMO_NUMERO_ARCHIVOS];*/
-
     /*Validar que los archivos existan*/
     for(i=0; i<numero_archivos_input; i++){
         numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[ i ] );
@@ -61,16 +57,9 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
                 perror("fork:");
                 exit(1);
           }/*end if*/
-                /* Codigo que ejecutaran los hijos */
+
           if (childpid == 0) {
               printf("Inicia proceso hijo con pid %d\n", getpid());
-
-              /*array_registros = LeerArchivo( array_archivos_input[i], lineas_por_archivo[i]);
-              OrdenarRegistroPorBurbuja(array_registros, lineas_por_archivo[i]);
-              ImprimirArchivo(array_registros, lineas_por_archivo[i], array_archivos_input[i], false, true);
-
-              free(array_registros);
-              array_registros = NULL;*/
 
               strcat(comando, array_archivos_input[i]);
               strcat(comando, " > ");
@@ -83,9 +72,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
               argumentos[2] = comando;
 
               confirmacion = execvp(argumentos[0], argumentos);
-              /* If the child process reaches this point, then */
-              /* execvp must have failed. */
-              /*fprintf(stderr, "Child process could not do execvp.\n");*/
+
               if (confirmacion == -1){
                   perror("No ejecutado");
                   exit(1);
@@ -95,7 +82,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
               exit(1);
           }/*end if*/
     }/*end for*/
-        /* El padre espera por los hijos */
+
     for (i = 0; i < nprocesos; ++i){
         wait(&status);
     }/*end for*/
@@ -121,7 +108,7 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
     for (i = 0; i < numero_archivos_input; i++) {
         strcpy(archivo_nombre, array_archivos_input[i]);
         strcat(archivo_nombre,"_temporal");
-        /*printf("EN contar lineas: %s\n", archivo_nombre);*/
+
         numero_lineas_archivo = ContarLineasArchivo( archivo_nombre );
         if(numero_lineas_archivo==0){
             BorrarTemporales(numero_archivos_input, array_archivos_input);
@@ -129,7 +116,7 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
         }/*end if*/
         total_lineas = total_lineas + numero_lineas_archivo;
     }/*end for*/
-    /*printf("Total lineas: %d\n", total_lineas);*/
+
     return total_lineas;
 }
 
@@ -156,11 +143,10 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
     for (i = 0; i < numero_archivos_input; i++) {
         strcpy(archivo_nombre, array_archivos_input[i]);
         strcat(archivo_nombre,"_temporal");
-        /*printf("EN leer temporales: %s\n", archivo_nombre);*/
+
         numero_lineas_archivo = ContarLineasArchivo( archivo_nombre );
 
         if(numero_lineas_archivo == 0){
-            /*printf("%s\n", "Problema leyendo archivos temporales.");*/
             BorrarTemporales(numero_archivos_input, array_archivos_input);
             exit(1);
         }/*end if*/
@@ -213,9 +199,7 @@ Retorno:
 Descripción:
 */
 void ImprimirResultado(registro* array_temporales, char archivo_output[MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
-
     ImprimirArchivo(array_temporales, total_lineas, archivo_output, false);
-
 }
 
 /*
@@ -227,7 +211,7 @@ Descripción:
 */
 int main (int argc, char **argv) {
 
-    int numero_archivos_input = 0; /*j para manejar la posición en el array de archivos input*/
+    int numero_archivos_input = 0;
     int i;
     int resultado_comparacion_strings;
     bool bandera_orden_reverso = false;
@@ -244,10 +228,6 @@ int main (int argc, char **argv) {
         exit(1);
     }/*end if*/
 
-    /*
-    for (i = 0; i < argc; i++){
-        printf("%s\n", argv[i]);
-    }*/
     resultado_comparacion_strings = strcmp("-r", argv[1]);
     if( resultado_comparacion_strings == 0 ){
         bandera_orden_reverso = true;
@@ -268,17 +248,11 @@ int main (int argc, char **argv) {
         if( resultado_comparacion_strings != 0 ){
             /*si argv[i] es diferente de -r entonces es archivo de entrada*/
             strcpy(array_archivos_input[numero_archivos_input], argv[i]);
-            /*printf("%s\n", array_archivos_input[i]);*/
             numero_archivos_input = numero_archivos_input+1;
         }/*end if*/
     }/*end for*/
 
-    /*for (i = 0; i < numero_archivos_input; i++){
-        printf("%s\n", array_archivos_input[i]);
-    }*/
-
     strcpy(archivo_output, argv[argc-1]);
-    /*printf("%s\n", archivo_output);*/
 
     RepartirArchivosProcesos(array_archivos_input, numero_archivos_input, bandera_orden_reverso);
 
