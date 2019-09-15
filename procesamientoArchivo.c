@@ -339,7 +339,7 @@ ordenar, enteros con las posiciones izquierda (left), derecha (right) y la del
 pívot (hallada en la función MergeSort), y booleano indicando si el
 ordenamiento se va a realizar o no en orden reverso.
 Retorno: no tiene.
-Descripción: Mezcla dos sub-arreglos del arreglo original. El primer subarreglo
+Descripción: mezcla dos sub-arreglos del arreglo original. El primer subarreglo
 va desde la posición izquierda hasta la posición del pívot, y el segundo subarreglo
 va desde la posición del pívot hasta la posición derecha. Cada sub-arreglo es
 mantenido con sub-arreglos auxiliares llamados array_L y array_R, y de acuerdo
