@@ -15,13 +15,21 @@ Fecha de última modificación: 12/09/19
 #include <sys/wait.h>
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: RepartirArchivosProcesos
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un arreglo con los nombres de los archivos de entrada,
+un entero con el número de archivos de entrada y un booleano indicando si el
+ordenamiento se debe realizar o no en orden reverso.
+Retorno: no tiene.
+Descripción: para cada archivo de entrada crea un proceso hijo (excepto si sólo
+hay un archivo de entrada, caso en el que el padre se encarga) que se ocupa de
+leer su respectivo archivo, ordenar los elementos de éste (usando Bubble Sort) e
+ imprimir un archivo temporal con dichos elementos ordenados. Para ello, cada
+ proceso realiza llamadas a las funciones encargadas de cada tarea. El proceso
+ padre espera que todos los procesos hijos terminen.
 */
-void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int numero_archivos_input, bool bandera_orden_reverso){
+void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO],
+  int numero_archivos_input, bool bandera_orden_reverso){
 
     int status, i,nprocesos=numero_archivos_input;
     pid_t childpid;
@@ -70,13 +78,17 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ContarTotalLineasTemporales
+Autores de la función: Adrián García.
+Parámetros de entrada: un entero con el número de archivos de entrada,
+un arreglo con los nombres de los archivos de entrada.
+Retorno: un entero con el número de líneas totales de todos los archivos
+temporales que fueron creados.
+Descripción: cuenta las líneas de cada archivo temporales y suma éstas para
+retornar la cantidad total de líneas de todos los archivos temporales.
 */
-int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
+int ContarTotalLineasTemporales(int numero_archivos_input,
+  char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
 
     int total_lineas = 0;
     int numero_lineas_archivo;
@@ -97,13 +109,19 @@ int ContarTotalLineasTemporales(int numero_archivos_input, char array_archivos_i
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: LeerArchivosTemporales
+Autores de la función: Adrián García.
+Parámetros de entrada: un entero con el número de archivos de entrada,
+un arreglo con los nombres de los archivos de entrada y
+un entero con el número total de líneas de todos los archivos de entrada
+Retorno: un apuntador a arreglo de tipo registro con la totalidad de
+elementos contenidos en los archivos temporales (que guardan el ordenamiento
+de cada archivo de entrada).
+Descripción: lee todos los archivos temporales creados por los procesos hijos y
+almacena todos los datos de éstos, en un arreglo de tipo registro.
 */
-registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
+registro* LeerArchivosTemporales(int numero_archivos_input,
+  char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
 
     int i, j, k = 0;
     int numero_lineas_archivo;
@@ -144,13 +162,16 @@ registro* LeerArchivosTemporales(int numero_archivos_input, char array_archivos_
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: BorrarTemporales
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un entero con el número de archivos de entrada,
+un arreglo con los nombres de los archivos de entrada.
+Retorno: no tiene.
+Descripción: borra los archivos temporales creados para almacenar
+el ordenamiento de cada uno de los archivos de entrada.
 */
-void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
+void BorrarTemporales(int numero_archivos_input,
+  char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]){
     int status;
     int i;
     char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
@@ -167,22 +188,32 @@ void BorrarTemporales(int numero_archivos_input, char array_archivos_input[][MAX
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ImprimirResultado
+Autores de la función: Luis Rosales.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que ya fue
+ordenado, el nombre del archivo de salida y el total de líneas que éste va a
+tener.
+Retorno: no tiene.
+Descripción: invoca la función que imprime los elementos del arreglo en el
+archivo de salida especificado.
 */
-void ImprimirResultado(registro* array_temporales, char archivo_output[MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
+void ImprimirResultado(registro* array_temporales,
+  char archivo_output[MAXIMO_NOMBRE_ARCHIVO], int total_lineas){
     ImprimirArchivo(array_temporales, total_lineas, archivo_output, false);
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: main
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un entero con el número de argumentos recibidos por
+consola y un arreglo de los argumentos recibidos.
+Retorno: un entero indicando si el programa finaliza.
+Descripción: es la función que inicia el programa, recibiendo los argumentos
+introducidos por consola, validándolos y llamando las otras funciones para
+realizar el ordenamiento. Una vez se ha realizado el ordenamiento individual de
+cada archivo en los procesos hijos, se ordena un arreglo con la totalidad de los
+elementos de todos los archivos de entrada usando Merge Sort (se llama a la
+función encargada).
 */
 int main (int argc, char **argv) {
 

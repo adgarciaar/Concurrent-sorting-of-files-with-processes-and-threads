@@ -4,7 +4,7 @@ Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para procesar cada archivo de entrada en
 los comandos csortp, csorth y csortpexec.
 Funciones:
-Fecha de última modificación: 12/09/19
+Fecha de última modificación: 13/09/19
 */
 
 #include "procesamientoArchivo.h"
@@ -12,6 +12,15 @@ Fecha de última modificación: 12/09/19
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+/*
+Función: AbrirArchivo
+Autores de la función: Adrián García.
+Parámetros de entrada: nombre del archivo a abrir.
+Retorno: un valor booleano que es true si el archivo se puede abrir
+o false si el archivo no se puede abrir.
+Descripción: verifica que un archivo de entrada se puede abrir.
+*/
 
 bool AbrirArchivo(char nombre_archivo[]){
     FILE *archivo;
@@ -26,11 +35,15 @@ bool AbrirArchivo(char nombre_archivo[]){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: LeerArchivo
+Autores de la función: Adrián García.
+Parámetros de entrada: nombre del archivo a leer y número de líneas que tiene.
+Retorno: apuntador a arreglo de tipo registro, que contiene todos los datos del
+archivo.
+Descripción: lee un archivo línea por línea, almacenando los elementos de cada
+una en una estructura registro (definida en procesamientoArchivo.h) y devuelve
+un apuntador a arreglo de tipo registro que contiene todos los datos del
+archivo.
 */
 registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 
@@ -76,7 +89,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
             *caracter_aux = '\0';
         }/*end if*/
 
-        auxiliar_para_strtok_r = linea_aux, array_registros[i].cadena;
+        auxiliar_para_strtok_r = linea_aux;
 
         item = strtok_r(linea_aux, delimitador, &auxiliar_para_strtok_r);
         contador = 1;
@@ -102,11 +115,11 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función:ContarLineasArchivo
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: nombre del archivo al que se le van a contar las líneas.
+Retorno: el número de líneas que tiene el archivo.
+Descripción: cuenta el número de líneas que tiene un archivo y retorna dicho valor.
 */
 int ContarLineasArchivo(char nombre_archivo[]){
     FILE *archivo;
@@ -133,11 +146,14 @@ int ContarLineasArchivo(char nombre_archivo[]){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: IntercambiarElementosArreglo
+Autores de la función: Adrián García.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que se está
+ordenando, y un entero con la posición del primer elemento a intercambiar.
+Retorno: no tiene.
+Descripción: intercambia dos elementos en un arreglo de tipo registro,
+específicamente intercambia los elementos j y j+1. Constituye una función
+auxiliar para la función OrdenarRegistroPorBurbuja.
 */
 void IntercambiarElementosArreglo(registro* array_registros, int j){
 
@@ -164,11 +180,14 @@ void IntercambiarElementosArreglo(registro* array_registros, int j){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: OrdenarRegistroPorBurbuja
+Autores de la función: Adrián García.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que se va a
+ordenar, un entero con el número de elementos de dicho arreglo y un booleano
+indicando si el ordenamiento se va a hacer o no en orden reverso.
+Retorno: no tiene.
+Descripción: realiza el ordenamiento de un arreglo de tipo registro usando el
+algoritmo de ordenamiento Bubble Sort.
 */
 void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
 
@@ -246,44 +265,63 @@ void OrdenarRegistroPorBurbuja(registro* array_registros, int numero_elementos, 
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: OrdenarRegistroPorMergeSort
+Autores de la función: la fuente original es M. Kjanna and C. Nayal. (2019) Merge Sort. [Online]. Available: https://www.
+geeksforgeeks.org/Merge-sort/. Adaptado por Adrián García.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que se va a
+ordenar, un entero con el número de elementos de dicho arreglo y un booleano
+indicando si el ordenamiento se va a hacer o no en orden reverso.
+Retorno: no tiene.
+Descripción: invoca a la función MergeSort, enviando a ésta como parámetros
+el apuntador a arreglo de tipo registro, la primera posición de dicho arreglo,
+la última posición de dicho arreglo, y el booleano indicando si el ordenamiento
+se va a realizar en orden reverso.
 */
 void OrdenarRegistroPorMergeSort(registro* array_registros, int numero_elementos, bool bandera_orden_reverso){
-    mergeSort(array_registros, 0, numero_elementos - 1, bandera_orden_reverso);
+    MergeSort(array_registros, 0, numero_elementos - 1, bandera_orden_reverso);
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: OrdenarRegistroPorMergeSort
+Autores de la función: la fuente original es M. Kjanna and C. Nayal. (2019) Merge Sort. [Online]. Available: https://www.
+geeksforgeeks.org/merge-sort/. Adaptado por Adrián García.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que se va a
+ordenar, un entero con una posición izquierdo (left) del arreglo, un entero con
+una posición derecha (right) del arreglo y un booleano indicando si el
+ordenamiento se va a hacer o no en orden reverso.
+Retorno: no tiene.
+Descripción: es la función principal para realizar el ordenamiento del arreglo
+mediante el algoritmo Merge Sort. Si los límites izquierdo (left) y derecho (right)
+del sub-arreglo a ser ordenado son correctos, se toma como pívot el elemento en
+la mitad entre ambos límitesy luego se invoca a la misma función dos veces:
+en la primera enviando como parámetros la parte del arreglo desde el límite
+izquierdo hasta el pívot, y en la segunda la parte del arreglo desde el pívot
+hasta el límite derecho.
+Posteriormente, se llama a la función Merge, la cual mezcla de forma ordenada
+las partes izquierda y derecha previamente ordenadas.
 */
-/* l is for left index and r is right index of the
-   sub-array of arr to be sorted */
-void mergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso){
+void MergeSort(registro* array_registros, int l, int r, bool bandera_orden_reverso){
     if (l < r){
         int m;
         m = l+(r-l)/2;/* Same as (l+r)/2, but avoids overflow for large l and h */
 
         /* Sort first and second halves*/
-        mergeSort(array_registros, l, m, bandera_orden_reverso);
-        mergeSort(array_registros, m+1, r, bandera_orden_reverso);
+        MergeSort(array_registros, l, m, bandera_orden_reverso);
+        MergeSort(array_registros, m+1, r, bandera_orden_reverso);
 
-        merge(array_registros, l, m, r, bandera_orden_reverso);
+        Merge(array_registros, l, m, r, bandera_orden_reverso);
     }/*end if*/
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: CopiarElementoArreglo
+Autores de la función: Adrián García.
+Parámetros de entrada: dos apuntadores a sub-arreglos de tipo registro (del arreglo
+original que se está ordenando), y dos enteros indicando posiciones en los dos
+subarreglos respectivamente.
+Retorno: no tiene.
+Descripción: copia el elemento del sub-arreglo 2 en la posición 2, al sub-arreglo
+1 en la posición 1. Se trata de una función auxiliar para la función Merge.
 */
 void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1, int posicion2){
       strcpy(arreglo1[posicion1].cadena, arreglo2[posicion2].cadena);
@@ -293,14 +331,22 @@ void CopiarElementoArreglo(registro* arreglo1, registro* arreglo2, int posicion1
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción: Merges two subarrays of arr[]. First subarray is arr[l..m].
-Second subarray is arr[m+1..r]
+Función: OrdenarRegistroPorMergeSort
+Autores de la función: la fuente original es M. Kjanna and C. Nayal. (2019) Merge Sort. [Online]. Available: https://www.
+geeksforgeeks.org/Merge-sort/. Adaptado por Adrián García.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que se va a
+ordenar, enteros con las posiciones izquierda (left), derecha (right) y la del
+pívot (hallada en la función MergeSort), y booleano indicando si el
+ordenamiento se va a realizar o no en orden reverso.
+Retorno: no tiene.
+Descripción: Mezcla dos sub-arreglos del arreglo original. El primer subarreglo
+va desde la posición izquierda hasta la posición del pívot, y el segundo subarreglo
+va desde la posición del pívot hasta la posición derecha. Cada sub-arreglo es
+mantenido con sub-arreglos auxiliares llamados array_L y array_R, y de acuerdo
+a las condiciones del algoritmo elementos del arreglo original son
+intercambiados usando los sub-arreglos auxiliares.
 */
-void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso){
+void Merge(registro* array_registros, int l, int m, int r, bool bandera_orden_reverso){
 
     int i, j, k;
     int n1 = m - l + 1;
@@ -339,7 +385,7 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
     /* Merge the temp arrays back into arr[l..r]*/
     i = 0; /* Initial index of first subarray */
     j = 0; /* Initial index of second subarray */
-    k = l; /* Initial index of merged subarray */
+    k = l; /* Initial index of Merged subarray */
     while (i < n1 && j < n2){
 
         if (bandera_orden_reverso == false){ /*Se va a ordenar de menor a mayor*/
@@ -437,11 +483,16 @@ void merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ImprimirArchivo
+Autores de la función: Luis Rosales.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que ya fue
+ordenado, un entero indicando el número de elementos de dicho arreglo, el
+nombre del archivo donde se van a imprimir los elementos del arreglo y un
+booleano indicando si el archivo que se va a escribir es temporal (para el caso
+de los comandos que crean procesos hijos).
+Retorno: no tiene.
+Descripción: imprime los elementos de un arreglo de tipo registro en el archivo
+de salida indicado.
 */
 void ImprimirArchivo(registro* array_registros, int numero_elementos, char nombre_archivo[], bool temporal){
 

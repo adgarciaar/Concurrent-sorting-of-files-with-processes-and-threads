@@ -17,13 +17,16 @@ Fecha de última modificación: 12/09/19
 #include <limits.h>
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ProcesarArchivo
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un identificador que corresponde al número del hilo
+(desde 0 hasta 9).
+Retorno: no tiene.
+Descripción: es la función que se ejecuta en cada hilo creado. Se realiza lectura
+del archivo de entrada correspondiente y luego se realiza su ordenamiento usando
+Bubble Sort (ordenamiento que queda guardado en la variable global array_temporales).
+Variables globales que usa: array_temporales, lineas_por_archivo, bandera_orden_reverso
 */
-/*Usa las variables globales: array_temporales, lineas_por_archivo, bandera_orden_reverso*/
 void *ProcesarArchivo(void *thread_id){
 
     int *id_ptr;
@@ -44,13 +47,15 @@ void *ProcesarArchivo(void *thread_id){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: RepartirArchivosHilos
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un entero con el número de archivos de entrada.
+Retorno: no tiene.
+Descripción: crea tantos hilos como archivos de entrada se reciben, asignándose
+a cada uno la ejecución de la función ProcesarArchivo enviando como parámetro
+el identificador del hilo. El proceso padre espera a que todos los hilos terminen.
+Variables globales que usa: array_temporales, array_archivos_input, lineas_por_archivo
 */
-/*Usa las variables globales: array_temporales, array_archivos_input, lineas_por_archivo*/
 void RepartirArchivosHilos(int numero_archivos_input){
 
     pthread_t threads[numero_archivos_input];
@@ -78,13 +83,15 @@ void RepartirArchivosHilos(int numero_archivos_input){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ContarTotalLineas
+Autores de la función: Adrián García
+Parámetros de entrada: un entero con el número de archivos de entrada.
+Retorno: no tiene.
+Descripción: cuenta el número total de líneas de todos los archivos de entrada,
+usando el arreglo global lineas_por_archivo que contiene el número de líneas
+de cada uno de los archivos.
+Variables globales que usa: lineas_por_archivo, total_lineas
 */
-/*Usa la variable global: lineas_por_archivo*/
 void ContarTotalLineas(int numero_archivos_input){
     int i;
     for(i=0; i<numero_archivos_input; i++){
@@ -93,13 +100,16 @@ void ContarTotalLineas(int numero_archivos_input){
 }
 
 /*
-Función:
-Autores de la función:
+Función: UnirRegistros
+Autores de la función: Adrián García.
 Parámetros de entrada:
-Retorno:
-Descripción:
+Retorno: un apuntador a arreglo de tipo registro con la totalidad de
+elementos de todos los archivos de entrada (ya individualmente ordenados).
+Descripción: usa el arreglo global array_temporales para almacenar en un nuevo
+arreglo la totalidad de elementos de todos los archivos de entrada (ya
+individualmente ordenados), y retorna este último arreglo.
+Variables globales que usa: array_archivos_input, array_temporales
 */
-/*Usa la variable global: array_archivos_input, array_temporales*/
 registro* UnirRegistros(int numero_archivos_input){
 
     int i, j, k=0;
@@ -137,22 +147,31 @@ registro* UnirRegistros(int numero_archivos_input){
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: ImprimirResultado
+Autores de la función: Luis Rosales.
+Parámetros de entrada: un apuntador a arreglo de tipo registro que ya fue
+ordenado y el nombre del archivo de salida.
+Retorno: no tiene.
+Descripción: invoca la función que imprime los elementos del arreglo en el
+archivo de salida especificado.
 */
-void ImprimirResultado(registro* array_general, char archivo_output[MAXIMO_NOMBRE_ARCHIVO]){
+void ImprimirResultado(registro* array_general,
+  char archivo_output[MAXIMO_NOMBRE_ARCHIVO]){
     ImprimirArchivo(array_general, total_lineas, archivo_output, false);
 }
 
 /*
-Función:
-Autores de la función:
-Parámetros de entrada:
-Retorno:
-Descripción:
+Función: main
+Autores de la función: Adrián García y Luis Rosales.
+Parámetros de entrada: un entero con el número de argumentos recibidos por
+consola y un arreglo de los argumentos recibidos.
+Retorno: un entero indicando si el programa finaliza.
+Descripción: es la función que inicia el programa, recibiendo los argumentos
+introducidos por consola, validándolos y llamando las otras funciones para
+realizar el ordenamiento. Una vez se ha realizado el ordenamiento individual de
+cada archivo en los hilos, se ordena un arreglo con la totalidad de los
+elementos de todos los archivos de entrada usando Merge Sort (se llama a la
+función encargada).
 */
 int main (int argc, char **argv) {
 
