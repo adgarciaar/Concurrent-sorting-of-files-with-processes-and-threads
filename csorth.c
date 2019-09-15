@@ -116,7 +116,7 @@ registro* UnirRegistros(int numero_archivos_input){
     int numero_lineas_archivo;
     registro* array_general = (registro*)malloc(total_lineas*sizeof(registro));
     if (array_general == NULL) {
-        printf("Memory not allocated.\n");
+        perror("Memoria no alocada");
         exit(1);
     }/*end if*/
     registro* array_auxiliar = NULL;

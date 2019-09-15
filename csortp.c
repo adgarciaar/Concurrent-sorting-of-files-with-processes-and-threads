@@ -130,7 +130,7 @@ registro* LeerArchivosTemporales(int numero_archivos_input,
     char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
 
     if (array_temporales == NULL) {
-        printf("Memory not allocated.\n");
+        perror("Memoria no alocada");
         exit(1);
     }/*end if*/
 

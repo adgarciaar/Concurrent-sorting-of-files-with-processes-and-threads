@@ -73,7 +73,7 @@ void RepartirArchivosProcesos(char array_archivos_input[][MAXIMO_NOMBRE_ARCHIVO]
               confirmacion = execvp(argumentos[0], argumentos);
 
               if (confirmacion == -1){
-                  perror("No ejecutado");
+                  perror("No ejecutado el comando sort");
                   exit(1);
               }/*end if*/
 
@@ -145,7 +145,7 @@ registro* LeerArchivosTemporales(int numero_archivos_input,
     char archivo_nombre[MAXIMO_NOMBRE_ARCHIVO];
 
     if (array_temporales == NULL) {
-        printf("Memory not allocated.\n");
+        perror("Memoria no alocada");
         exit(1);
     }/*end if*/
 

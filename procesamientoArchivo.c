@@ -60,7 +60,7 @@ registro* LeerArchivo(char nombre_archivo[], int numero_lineas_archivo){
     char* auxiliar_para_strtok_r;
 
     if (array_registros == NULL) {
-        printf("Memoria no alocada para las filas del log.\n");
+        perror("Memoria no alocada para las filas del log");
         exit(1);
     }/*end if*/
 
@@ -362,12 +362,12 @@ void Merge(registro* array_registros, int l, int m, int r, bool bandera_orden_re
     array_R = (registro*)malloc(n2*sizeof(registro));
 
     if (array_L == NULL) {
-        printf("Memoria no alocada.\n");
+        perror("Memoria no alocada");
         exit(1);
     }/*end if*/
 
     if (array_R == NULL) {
-        printf("Memoria no alocada.\n");
+        perror("Memoria no alocada");
         exit(1);
     }/*end if*/
 
