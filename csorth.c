@@ -24,8 +24,8 @@ Parámetros de entrada: un identificador que corresponde al número del hilo
 Retorno: no tiene.
 Descripción: es la función que se ejecuta en cada hilo creado. Se realiza lectura
 del archivo de entrada correspondiente y luego se realiza su ordenamiento usando
-Bubble Sort (ordenamiento que queda guardado en la variable global array_temporales).
-Variables globales que usa: array_temporales, lineas_por_archivo, bandera_orden_reverso
+Bubble Sort (ordenamiento que queda guardado en la variable global arreglo_temporales).
+Variables globales que usa: arreglo_temporales, lineas_por_archivo, bandera_orden_reverso
 */
 void *ProcesarArchivo(void *thread_id){
 
@@ -36,10 +36,10 @@ void *ProcesarArchivo(void *thread_id){
     tarea_id = *id_ptr;
     printf("Inicia hilo %d\n", tarea_id+1);
 
-    lineas_por_archivo[ tarea_id ] = ContarLineasArchivo( array_archivos_input[ tarea_id ] );
-    array_temporales[ tarea_id ] = LeerArchivo( array_archivos_input[ tarea_id ], lineas_por_archivo[ tarea_id ] );
+    lineas_por_archivo[ tarea_id ] = ContarLineasArchivo( arreglo_archivos_input[ tarea_id ] );
+    arreglo_temporales[ tarea_id ] = LeerArchivo( arreglo_archivos_input[ tarea_id ], lineas_por_archivo[ tarea_id ] );
 
-    OrdenarRegistroPorBurbuja(array_temporales[ tarea_id ], lineas_por_archivo[tarea_id], bandera_orden_reverso);
+    OrdenarRegistroPorBurbuja(arreglo_temporales[ tarea_id ], lineas_por_archivo[tarea_id], bandera_orden_reverso);
 
     printf("Termina hilo %d\n", tarea_id+1);
 
@@ -54,7 +54,7 @@ Retorno: no tiene.
 Descripción: crea tantos hilos como archivos de entrada se reciben, asignándose
 a cada uno la ejecución de la función ProcesarArchivo enviando como parámetro
 el identificador del hilo. El proceso padre espera a que todos los hilos terminen.
-Variables globales que usa: array_temporales, array_archivos_input, lineas_por_archivo
+Variables globales que usa: arreglo_temporales, arreglo_archivos_input, lineas_por_archivo
 */
 void RepartirArchivosHilos(int numero_archivos_input){
 
@@ -63,7 +63,7 @@ void RepartirArchivosHilos(int numero_archivos_input){
     int rc, i;
 
     for(i=0; i<MAXIMO_NUMERO_ARCHIVOS; i++){
-        array_temporales[i] = NULL;
+        arreglo_temporales[i] = NULL;
     }/*end for*/
 
     for(i=0; i<numero_archivos_input; i++){
@@ -105,44 +105,44 @@ Autores de la función: Adrián García.
 Parámetros de entrada:
 Retorno: un apuntador a arreglo de tipo registro con la totalidad de
 elementos de todos los archivos de entrada (ya individualmente ordenados).
-Descripción: usa el arreglo global array_temporales para almacenar en un nuevo
+Descripción: usa el arreglo global arreglo_temporales para almacenar en un nuevo
 arreglo la totalidad de elementos de todos los archivos de entrada (ya
 individualmente ordenados), y retorna este último arreglo.
-Variables globales que usa: array_archivos_input, array_temporales
+Variables globales que usa: arreglo_archivos_input, arreglo_temporales
 */
 registro* UnirRegistros(int numero_archivos_input){
 
     int i, j, k=0;
     int numero_lineas_archivo;
-    registro* array_general = (registro*)malloc(total_lineas*sizeof(registro));
-    if (array_general == NULL) {
+    registro* arreglo_general = (registro*)malloc(total_lineas*sizeof(registro));
+    if (arreglo_general == NULL) {
         perror("Memoria no alocada");
         exit(1);
     }/*end if*/
-    registro* array_auxiliar = NULL;
+    registro* arreglo_auxiliar = NULL;
 
     for(i=0; i<numero_archivos_input; i++){
 
-        numero_lineas_archivo = ContarLineasArchivo( array_archivos_input[i] );
+        numero_lineas_archivo = ContarLineasArchivo( arreglo_archivos_input[i] );
 
-        array_auxiliar = array_temporales[i];
+        arreglo_auxiliar = arreglo_temporales[i];
 
         for (j = 0; j < numero_lineas_archivo; j++){
 
-            strcpy(array_general[k].cadena, array_auxiliar[j].cadena);
-            array_general[k].tiempo_ejecucion = array_auxiliar[j].tiempo_ejecucion;
-            strcpy(array_general[k].fecha_ejecucion, array_auxiliar[j].fecha_ejecucion);
-            strcpy(array_general[k].hora_ejecucion, array_auxiliar[j].hora_ejecucion);
+            strcpy(arreglo_general[k].cadena, arreglo_auxiliar[j].cadena);
+            arreglo_general[k].tiempo_ejecucion = arreglo_auxiliar[j].tiempo_ejecucion;
+            strcpy(arreglo_general[k].fecha_ejecucion, arreglo_auxiliar[j].fecha_ejecucion);
+            strcpy(arreglo_general[k].hora_ejecucion, arreglo_auxiliar[j].hora_ejecucion);
             k = k + 1;
 
         }/*end for*/
 
-        array_auxiliar = NULL;
-        free(array_temporales[i]);
-        array_temporales[i] = NULL;
+        arreglo_auxiliar = NULL;
+        free(arreglo_temporales[i]);
+        arreglo_temporales[i] = NULL;
     }/*end for*/
 
-    return array_general;
+    return arreglo_general;
 
 }
 
@@ -155,9 +155,9 @@ Retorno: no tiene.
 Descripción: invoca la función que imprime los elementos del arreglo en el
 archivo de salida especificado.
 */
-void ImprimirResultado(registro* array_general,
+void ImprimirResultado(registro* arreglo_general,
   char archivo_output[MAXIMO_NOMBRE_ARCHIVO]){
-    ImprimirArchivo(array_general, total_lineas, archivo_output, false);
+    ImprimirArchivo(arreglo_general, total_lineas, archivo_output, false);
 }
 
 /*
@@ -181,8 +181,8 @@ int main (int argc, char **argv) {
     bandera_orden_reverso = false;
 
     char archivo_output[MAXIMO_NOMBRE_ARCHIVO];
-    registro* array_temporales = NULL;
-    registro* array_general = NULL;
+    registro* arreglo_temporales = NULL;
+    registro* arreglo_general = NULL;
 
     /*Si hay 13 argumentos significa que se pasaron: default, flag, 10 archivos de input y 1 de output*/
     /*Debe haber mínimo 3 argumentos: default, input file & output file*/
@@ -212,7 +212,7 @@ int main (int argc, char **argv) {
         resultado_comparacion_strings = strcmp("-r", argv[i]);
         if( resultado_comparacion_strings != 0 ){
             /*si argv[i] es diferente de -r entonces es archivo de entrada*/
-            strcpy(array_archivos_input[numero_archivos_input], argv[i]);
+            strcpy(arreglo_archivos_input[numero_archivos_input], argv[i]);
             numero_archivos_input = numero_archivos_input+1;
         }/*end if*/
     }/*end for*/
@@ -221,7 +221,7 @@ int main (int argc, char **argv) {
 
     bool auxiliar;
     for (i = 0; i < numero_archivos_input; i++){
-        auxiliar = AbrirArchivo(array_archivos_input[ i ]);
+        auxiliar = AbrirArchivo(arreglo_archivos_input[ i ]);
         if( auxiliar == false ){
             exit(1);
         }
@@ -231,12 +231,12 @@ int main (int argc, char **argv) {
 
     RepartirArchivosHilos(numero_archivos_input);
     ContarTotalLineas(numero_archivos_input);
-    array_general = UnirRegistros(numero_archivos_input);
-    OrdenarRegistroPorMergeSort(array_general, total_lineas, bandera_orden_reverso);
-    ImprimirResultado(array_general, archivo_output);
+    arreglo_general = UnirRegistros(numero_archivos_input);
+    OrdenarRegistroPorMergeSort(arreglo_general, total_lineas, bandera_orden_reverso);
+    ImprimirResultado(arreglo_general, archivo_output);
 
-    free(array_general);
-    array_general = NULL;
+    free(arreglo_general);
+    arreglo_general = NULL;
 
     return(0);
 }
