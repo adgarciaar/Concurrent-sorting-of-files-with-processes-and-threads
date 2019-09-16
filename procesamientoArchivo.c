@@ -31,7 +31,7 @@ bool AbrirArchivo(char nombre_archivo[]){
     }else{
         perror ( nombre_archivo );
         return false;
-    }
+    }/*end if*/
 }
 
 /*
@@ -302,10 +302,10 @@ las partes izquierda y derecha previamente ordenadas.
 */
 void MergeSort(registro* arreglo_registros, int l, int r, bool bandera_orden_reverso){
     if (l < r){
-        int m;
-        m = l+(r-l)/2;/* Same as (l+r)/2, but avoids overflow for large l and h */
+        int m; /*posición del elemento que se toma como pívot*/
+        m = l+(r-l)/2;/* Igual que (l+r)/2, pero evita desbordamiento para l y h grandes*/
 
-        /* Sort first and second halves*/
+        /* Ordenar primera y segunda mitad del arreglo*/
         MergeSort(arreglo_registros, l, m, bandera_orden_reverso);
         MergeSort(arreglo_registros, m+1, r, bandera_orden_reverso);
 
@@ -349,15 +349,15 @@ intercambiados usando los sub-arreglos auxiliares.
 void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_reverso){
 
     int i, j, k;
-    int n1 = m - l + 1;
-    int n2 =  r - m;
+    int n1 = m - l + 1; /*número de elementos a la izquierda del pívot más uno*/
+    int n2 =  r - m; /*número de elementos a la derecha del pívot*/
     int resultado_comparacion_strings;
     char fecha_hora_1[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
     char fecha_hora_2[TAMANO_FILA_FECHA_HORA+TAMANO_FILA_FECHA_HORA+1];
     registro* arreglo_L;
     registro* arreglo_R;
 
-    /*Creación de arreglos temporales para manejar izquierda y derecha*/
+    /*Creación de arreglos temporales para manejar izquierda (Left) y derecha (Right)*/
     arreglo_L = (registro*)malloc(n1*sizeof(registro));
     arreglo_R = (registro*)malloc(n2*sizeof(registro));
 
@@ -371,34 +371,34 @@ void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_
         exit(1);
     }/*end if*/
 
-    /* Copy data to temp arreglos L[] and R[] */
+    /* copiar datos a sub-arreglos temporales Left[] and Right[] */
     for (i = 0; i < n1; i++){
-        /* L[i] = arr[l + i]; */
+        /* Left[i] = original[l + i]; */
         CopiarElementoArreglo(arreglo_L, arreglo_registros, i, l + i);
     }/*end for*/
 
     for (j = 0; j < n2; j++){
-        /* R[j] = arr[m + 1+ j]; */
+        /* Right[j] = original[m + 1+ j]; */
         CopiarElementoArreglo(arreglo_R, arreglo_registros, j, m + 1 + j);
     }/*end for*/
 
-    /* Merge the temp arreglos back into arr[l..r]*/
-    i = 0; /* Initial index of first subarreglo */
-    j = 0; /* Initial index of second subarreglo */
-    k = l; /* Initial index of Merged subarreglo */
+    /* Unir los arreglos temporales de nuevo en el original[l..r]*/
+    i = 0; /* Primera posición del primer sub-arreglo */
+    j = 0; /* Primera posición del segundo subarreglo */
+    k = l; /* Posición inicial del subarreglo unido */
     while (i < n1 && j < n2){
 
         if (bandera_orden_reverso == false){ /*Se va a ordenar de menor a mayor*/
 
-            /*if (L[i] <= R[j]) /*de menor a mayor*/
+            /*if (Left[i] <= Right[j]) /*de menor a mayor*/
             if (arreglo_L[i].tiempo_ejecucion < arreglo_R[j].tiempo_ejecucion){
-                /* arr[k] = L[i]; */
+                /* original[k] = Left[i]; */
                 CopiarElementoArreglo(arreglo_registros, arreglo_L, k, i);
                 i++;
             }else{
 
                 if (arreglo_L[i].tiempo_ejecucion > arreglo_R[j].tiempo_ejecucion){
-                    /* arr[k] = R[j]; */
+                    /* original[k] = Right[j]; */
                     CopiarElementoArreglo(arreglo_registros, arreglo_R, k, j);
                     j++;
                 }else{
@@ -415,11 +415,11 @@ void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_
 
                     if( resultado_comparacion_strings < 0 ){
                       /*Si el elemento siguiente es menor en fecha u hora*/
-                        /* arr[k] = L[i]; */
+                        /* original[k] = Left[i]; */
                         CopiarElementoArreglo(arreglo_registros, arreglo_L, k, i);
                         i++;
                     }else{
-                        /* arr[k] = R[j]; */
+                        /* original[k] = Right[j]; */
                         CopiarElementoArreglo(arreglo_registros, arreglo_R, k, j);
                         j++;
                     }
@@ -429,12 +429,12 @@ void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_
         }else{ /*Se va a ordenar de mayor a menor*/
 
           if (arreglo_L[i].tiempo_ejecucion > arreglo_R[j].tiempo_ejecucion){
-              /* arr[k] = L[i]; */
+              /* original[k] = Left[i]; */
               CopiarElementoArreglo(arreglo_registros, arreglo_L, k, i);
               i++;
           }else{
               if (arreglo_L[i].tiempo_ejecucion < arreglo_R[j].tiempo_ejecucion){
-                  /* arr[k] = R[j]; */
+                  /* original[k] = Right[j]; */
                   CopiarElementoArreglo(arreglo_registros, arreglo_R, k, j);
                   j++;
               }else{
@@ -451,11 +451,11 @@ void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_
 
                   if( resultado_comparacion_strings > 0 ){
                     /*Si el elemento siguiente es mayor en fecha u hora*/
-                      /* arr[k] = L[i]; */
+                      /* original[k] = Left[i]; */
                       CopiarElementoArreglo(arreglo_registros, arreglo_L, k, i);
                       i++;
                   }else{
-                      /* arr[k] = R[j]; */
+                      /* original[k] = Right[j]; */
                       CopiarElementoArreglo(arreglo_registros, arreglo_R, k, j);
                       j++;
                   }/*end if*/
@@ -464,16 +464,16 @@ void Merge(registro* arreglo_registros, int l, int m, int r, bool bandera_orden_
         }/*end if*/
         k++;
     }/*end while*/
-    /* Copy the remaining elements of L[], if there are any */
+    /* Copiar los elementos restantes de Left[], si hay */
     while (i < n1){
-        /* arr[k] = L[i]; */
+        /* arr[k] = Left[i]; */
         CopiarElementoArreglo(arreglo_registros, arreglo_L, k, i);
         i++;
         k++;
     }/*end while*/
-    /* Copy the remaining elements of R[], if there are any */
+    /* Copiar los elementos restantes de Right[], si hay */
     while (j < n2){
-        /* arr[k] = R[j]; */
+        /* original[k] = Right[j]; */
         CopiarElementoArreglo(arreglo_registros, arreglo_R, k, j);
         j++;
         k++;

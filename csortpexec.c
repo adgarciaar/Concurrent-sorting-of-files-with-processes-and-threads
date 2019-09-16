@@ -281,8 +281,8 @@ int main (int argc, char **argv) {
         auxiliar = AbrirArchivo(arreglo_archivos_input[ i ]);
         if( auxiliar == false ){
             exit(1);
-        }
-    }
+        }/*end if*/
+    }/*end for*/
 
     RepartirArchivosProcesos(arreglo_archivos_input, numero_archivos_input, bandera_orden_reverso);
 

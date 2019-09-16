@@ -224,8 +224,8 @@ int main (int argc, char **argv) {
         auxiliar = AbrirArchivo(arreglo_archivos_input[ i ]);
         if( auxiliar == false ){
             exit(1);
-        }
-    }
+        }/*end if*/
+    }/*end for*/
 
     total_lineas = 0;
 
