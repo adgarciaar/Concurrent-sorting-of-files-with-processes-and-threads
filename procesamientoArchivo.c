@@ -3,7 +3,9 @@ Nombre del archivo: procesamientoArchivo.c
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para procesar cada archivo de entrada en
 los comandos csortp, csorth y csortpexec.
-Funciones:
+Funciones: LeerArchivo, ContarLineasArchivo, IntercambiarElementosArreglo,
+OrdenarRegistroPorBurbuja, OrdenarRegistroPorMergeSort, ImprimirArchivo,
+MergeSort, CopiarElementoArreglo, Merge, AbrirArchivo.
 Fecha de última modificación: 13/09/19
 */
 
