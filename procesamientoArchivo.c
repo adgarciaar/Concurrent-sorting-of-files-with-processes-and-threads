@@ -6,7 +6,7 @@ los comandos csortp, csorth y csortpexec.
 Funciones: LeerArchivo, ContarLineasArchivo, IntercambiarElementosArreglo,
 OrdenarRegistroPorBurbuja, OrdenarRegistroPorMergeSort, ImprimirArchivo,
 MergeSort, CopiarElementoArreglo, Merge, AbrirArchivo.
-Fecha de última modificación: 13/09/19
+Fecha de última modificación: 14/09/19
 */
 
 #include "procesamientoArchivo.h"

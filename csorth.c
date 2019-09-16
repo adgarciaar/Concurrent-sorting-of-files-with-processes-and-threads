@@ -4,7 +4,7 @@ Autores: Adrián García y Luis Rosales
 Objetivo: proveer la implementación para ejecutar el comando csorth
 Funciones: ProcesarArchivo, RepartirArchivosHilos, ContarTotalLineas,
 UnirRegistros, ImprimirResultado.
-Fecha de última modificación: 12/09/19
+Fecha de última modificación: 14/09/19
 */
 
 #include "csorth.h"

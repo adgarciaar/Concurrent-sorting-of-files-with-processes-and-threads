@@ -8,7 +8,7 @@ archivo de entrada (log).
 Funciones: LeerArchivo, ContarLineasArchivo, IntercambiarElementosArreglo,
 OrdenarRegistroPorBurbuja, OrdenarRegistroPorMergeSort, ImprimirArchivo,
 MergeSort, CopiarElementoArreglo, Merge, AbrirArchivo.
-Fecha de última modificación: 12/09/19
+Fecha de última modificación: 14/09/19
 */
 
 #include <stdbool.h>

@@ -4,7 +4,7 @@ Autores: Adrián García y Luis Rosales
 Objetivo: proveer los prototipos de las funciones que usa el comando csortpexec
 Funciones: RepartirArchivosProcesos, LeerArchivosTemporales, ContarTotalLineasTemporales,
 ImprimirResultado, BorrarTemporales, main.
-Fecha de última modificación: 12/09/19
+Fecha de última modificación: 14/09/19
 */
 
 #include "procesamientoArchivo.h"
