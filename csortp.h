@@ -2,7 +2,8 @@
 Nombre del archivo: csortp.h
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer los prototipos de las funciones que usa el comando csortp
-Funciones:
+Funciones: RepartirArchivosProcesos, LeerArchivosTemporales, ContarTotalLineasTemporales
+ImprimirResultado, BorrarTemporales, main.
 Fecha de última modificación: 12/09/19
 */
 

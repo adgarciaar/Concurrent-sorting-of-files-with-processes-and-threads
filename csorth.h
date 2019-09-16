@@ -2,7 +2,8 @@
 Nombre del archivo: csorth.h
 Autores: Adrián García y Luis Rosales
 Objetivo: proveer los prototipos de las funciones que usa el comando csorth
-Funciones:
+Funciones: ProcesarArchivo, RepartirArchivosHilos, ContarTotalLineas,
+UnirRegistros, ImprimirResultado.
 Fecha de última modificación: 12/09/19
 */
 
