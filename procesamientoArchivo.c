@@ -133,7 +133,7 @@ int ContarLineasArchivo(char nombre_archivo[]){
         return 0;
     }/*end if*/
 
-    /* Extract characters from file and store in character c */
+    /* extraer caracteres del archivo y almacenarlos en variable caracter*/
     for (caracter = getc(archivo); caracter != EOF; caracter = getc(archivo)){
         if (caracter == '\n'){
             contador_lineas = contador_lineas + 1;
